@@ -1,6 +1,27 @@
-# 🚀 What did i use?
+![tailwind](https://i.hizliresim.com/ay6gwss.png)
+### tailwind.config.js usage example.
 
-- [chroma.js](https://gka.github.io/chroma.js/)
+```js
+const getPallette = require('tailwind-palette-creator');
+
+const primary = getPallette("#FFBD00","primary", 500);
+const secondary = getPallette("#4D5463", "secondary", 500);
+const mainGray = getPallette("#F1F2F2", "mainGray", 500);
+
+module.exports = {
+  content: ["./src/**/*.{html,js}"],
+  theme: {
+    extend: {
+      colors: {
+        ...primary.palette,
+        ...secondary.palette,
+        ...mainGray.palette,
+      }
+    },
+  },
+  plugins: [],
+}
+```
 
 ## 🎉 Installation
 
@@ -79,3 +100,7 @@ console.log("Palette Main Shade " + paletteMainShade);
 console.log("Palette Text : ");
 console.log(paletteText);
 ```
+
+## 🚀 What did i use?
+
+- [chroma.js](https://gka.github.io/chroma.js/)
