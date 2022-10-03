@@ -1,0 +1,35 @@
+{
+  "name": "tailwind-palette-creator",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ibodev1/tailwind-palette-creator.git"
+  },
+  "homepage": "https://github.com/ibodev1/tailwind-palette-creator",
+  "bugs": {
+    "url": "https://github.com/ibodev1/tailwind-palette-creator/issues"
+  },
+  "keywords": [
+    "tailwind",
+    "palette",
+    "color",
+    "hex",
+    "tailwid palette",
+    "tailwid palette creator",
+    "tailwid palette generator",
+    "tailwid css",
+    "tailwidcss",
+    "tailwidcss palette",
+    "tailwidcss palette generator"
+  ],
+  "author": "İbrahim Ödev <ibrahimodev42@gmail.com>",
+  "description": "Color palette generation library for TailwindCSS."
+}
