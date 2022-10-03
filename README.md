@@ -2,11 +2,11 @@
 ### tailwind.config.js usage example.
 
 ```js
-const getPallette = require('tailwindcss-palette-generator');
+const getPalette = require('tailwindcss-palette-generator');
 
-const primary = getPallette("#FFBD00","primary", 500);
-const secondary = getPallette("#4D5463", "secondary", 500);
-const mainGray = getPallette("#F1F2F2", "mainGray", 500);
+const primary = getPalette("#FFBD00","primary", 500);
+const secondary = getPalette("#4D5463", "secondary", 500);
+const mainGray = getPalette("#F1F2F2", "mainGray", 500);
 
 module.exports = {
   content: ["./src/**/*.{html,js}"],
@@ -38,13 +38,13 @@ npm
 ### Import
 
 ```js
-    const getPallette = require('tailwindcss-palette-generator');
+    const getPalette = require('tailwindcss-palette-generator');
 ```
 
-### getPallette()
+### getPalette()
 
 ```js
-    const palette = getPallette("#ffbd00","primary", 500);
+    const palette = getPalette("#ffbd00","primary", 500);
 ```
 
 #### First Param : #ffbd00
@@ -77,9 +77,9 @@ You can specify from what time the main color of your palette starts.
 ## Example
 
 ```js
-const getPallette = require('./index');
+const getPalette = require('./index');
 
-const palette = getPallette("#ffbd00","primary", 500);
+const palette = getPalette("#ffbd00","primary", 500);
 
 const primary = palette.palette;
 

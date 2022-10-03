@@ -19,16 +19,9 @@
   },
   "keywords": [
     "tailwind",
-    "palette",
-    "color",
-    "hex",
-    "tailwid palette",
-    "tailwid palette creator",
-    "tailwid palette generator",
-    "tailwid css",
-    "tailwidcss",
-    "tailwidcss palette",
-    "tailwidcss palette generator"
+    "tailwind palette generator",
+    "tailwindcss",
+    "tailwindcss palette generator"
   ],
   "author": "İbrahim Ödev <ibrahimodev42@gmail.com>",
   "description": "Color palette generation library for TailwindCSS."

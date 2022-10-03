@@ -1,6 +1,6 @@
-const getPallette = require('./index');
+const getPalette = require('./index');
 
-const palette = getPallette("#ffbd00","primary", 500);
+const palette = getPalette("#ffbd00","primary", 500);
 
 const primary = palette.palette;
 

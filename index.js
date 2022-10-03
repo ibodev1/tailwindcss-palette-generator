@@ -33,7 +33,7 @@ const main = {
   }
 };
 
-const getPallette = (color = main.state.primaryColor, name = "primary", mainShade = 500) => {
+const getPalette = (color = main.state.primaryColor, name = "primary", mainShade = 500) => {
   if ((color.length === 4 || color.length === 7) && color.includes("#", 0)) {
     main.state.primaryColor = color;
     main.state.mainShade = mainShade;
@@ -53,4 +53,4 @@ const getPallette = (color = main.state.primaryColor, name = "primary", mainShad
   }
 };
 
-module.exports = getPallette;
+module.exports = getPalette;
