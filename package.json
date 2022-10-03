@@ -7,7 +7,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "node main.js"
+    "test": "node example.js",
+    "postversion": "git push origin main && git push origin --tags main && yarn publish . --tag $npm_package_version && git push && echo \"Successfully released version $npm_package_version!\""
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,8 @@
     "tailwindcss palette generator"
   ],
   "author": "İbrahim Ödev <ibrahimodev42@gmail.com>",
-  "description": "Color palette generation library for TailwindCSS."
+  "description": "Color palette generation library for TailwindCSS.",
+  "dependencies": {
+    "chroma-js": "^2.4.2"
+  }
 }
