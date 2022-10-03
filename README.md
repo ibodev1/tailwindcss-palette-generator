@@ -2,7 +2,7 @@
 ### tailwind.config.js usage example.
 
 ```js
-const getPallette = require('tailwind-palette-creator');
+const getPallette = require('tailwindcss-palette-generator');
 
 const primary = getPallette("#FFBD00","primary", 500);
 const secondary = getPallette("#4D5463", "secondary", 500);
@@ -27,18 +27,18 @@ module.exports = {
 
 yarn
 
-> yarn add tailwind-palette-creator
+> yarn add tailwindcss-palette-generator
 
 npm
 
-> npm i tailwind-palette-creator
+> npm i tailwindcss-palette-generator
 
 ## 👀 Usage
 
 ### Import
 
 ```js
-    const getPallette = require('tailwind-palette-creator');
+    const getPallette = require('tailwindcss-palette-generator');
 ```
 
 ### getPallette()
