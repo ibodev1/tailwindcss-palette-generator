@@ -55,9 +55,7 @@ Enter which color palette you want to create.
 
 - A color code in hex format must be entered. Must have a '#' at the beginning.
 
-- The hex code must be at least 3 characters long. without # at the beginning.
-
-- The hex code must be a maximum of 6 characters long. without # at the beginning.
+- Color must be 3 characters or 6 characters. without the '#'.
 
 #### Second Param : primary
 
@@ -79,7 +77,7 @@ You can specify from what time the main color of your palette starts.
 ## Example
 
 ```js
-const getPallette = require('tailwind-palette-creator');
+const getPallette = require('./index');
 
 const palette = getPallette("#ffbd00","primary", 500);
 
@@ -91,15 +89,14 @@ const paletteDefaultColor = palette.defaultColor;
 
 const paletteMainShade = palette.mainShade;
 
-const paletteText = palette.paletteText;
-
 console.log(primary);
 console.log("Palette Name : " + paletteName);
 console.log("Palette Default Color : " + paletteDefaultColor);
 console.log("Palette Main Shade " + paletteMainShade);
-console.log("Palette Text : ");
-console.log(paletteText);
 ```
+
+## Output
+![output](https://i.hizliresim.com/e43l1g5.jpg)
 
 ## 🚀 What did i use?
 

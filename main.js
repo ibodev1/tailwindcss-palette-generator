@@ -10,11 +10,7 @@ const paletteDefaultColor = palette.defaultColor;
 
 const paletteMainShade = palette.mainShade;
 
-const paletteText = palette.paletteText;
-
 console.log(primary);
 console.log("Palette Name : " + paletteName);
 console.log("Palette Default Color : " + paletteDefaultColor);
 console.log("Palette Main Shade " + paletteMainShade);
-console.log("Palette Text : ");
-console.log(paletteText);

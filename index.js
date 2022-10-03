@@ -43,22 +43,7 @@ const getPallette = (color = main.state.primaryColor, name = "primary", mainShad
     palette[name] = {
       ...result
     };
-
-    const paletteText = `
-      ${name} : {
-        DEFAULT:  '${palette[name].DEFAULT}',
-        '50': '${palette[name]['50']}',
-        '100': '${palette[name]['100']}',
-        '200': '${palette[name]['200']}',
-        '300': '${palette[name]['300']}',
-        '400': '${palette[name]['400']}',
-        '500': '${palette[name]['500']}',
-        '600': '${palette[name]['600']}',
-        '700': '${palette[name]['700']}',
-        '800': '${palette[name]['800']}',
-        '900': '${palette[name]['900']}',
-      }`;
-    return {palette, paletteText, name, defaultColor: palette[name].DEFAULT, mainShade};
+    return {palette, name, defaultColor: palette[name].DEFAULT, mainShade};
   } else if(name.length < 2) {
     return "The name can be at least 2 in length.";
   } else if(!main.state.shades.includes(mainShade)) {
