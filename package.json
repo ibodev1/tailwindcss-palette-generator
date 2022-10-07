@@ -4,11 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "directories": {
-    "lib": "lib"
+    "lib": "./index.js"
   },
   "scripts": {
     "test": "node example.js",
     "postversion": "git push origin main && git push origin --tags main && yarn publish --access public && git push && echo \"Successfully\""
+  },
+  "engines": {
+    "node": ">=14"
   },
   "repository": {
     "type": "git",

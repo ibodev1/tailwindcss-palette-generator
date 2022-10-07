@@ -1,26 +1,46 @@
-![tailwind](https://i.hizliresim.com/ay6gwss.png)
-### tailwind.config.js usage example.
+![tailwind](https://i.hizliresim.com/abke1nw.png)
+
+### Next.js + tailwind.config.js usage example.
 
 ```js
-const getPalette = require('tailwindcss-palette-generator');
+const getPalette = require("tailwindcss-palette-generator");
 
-const primary = getPalette("#FFBD00","primary", 500);
-const secondary = getPalette("#4D5463", "secondary", 500);
-const mainGray = getPalette("#F1F2F2", "mainGray", 500);
+const palette = getPalette([
+  {
+    color: "rgb(255, 189, 0)", // required
+    name: "primary", // required
+    shade: 400
+  },
+  {
+    color: "rgba(255, 189, 0, 1)", // required
+    name: "secondary", // required
+    shade: 500
+  },
+  {
+    color: "hsl(44, 100%, 50%)", // required
+    name: "tertiary", // required
+    shade: 600
+  },
+  {
+    color: "#FFBD00", // required
+    name: "quaternary", // required
+    shade: 300, // you will set shaders is mandatory
+    shades: [100, 200, 300, 400, 500]
+  }
+]);
 
 module.exports = {
-  content: ["./src/**/*.{html,js}"],
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}"
+  ],
   theme: {
     extend: {
-      colors: {
-        ...primary.palette,
-        ...secondary.palette,
-        ...mainGray.palette,
-      }
-    },
+      colors: palette
+    }
   },
-  plugins: [],
-}
+  plugins: []
+};
 ```
 
 ## 🎉 Installation
@@ -38,66 +58,84 @@ npm
 ### Import
 
 ```js
-    const getPalette = require('tailwindcss-palette-generator');
+const getPalette = require("tailwindcss-palette-generator");
 ```
 
 ### getPalette()
 
 ```js
-    const palette = getPalette("#ffbd00","primary", 500);
+const palette = getPalette(params);
 ```
 
-#### First Param : #ffbd00
+#### Params :
 
-Enter which color palette you want to create.
+- "color" : Main color of your palette. [*Required] (String)
+- "name" : The name of your palette. [*Required] (String)
+- "shade" : What time do you want the main shades of your palette to start and end at. [Optional] (Number)
+- "shades" : Shade layers of your palette. [Optional] (Array)
+  - If you add this you should add main shade as well. "shade:"
+  - Must be of type array.
+  - May consist of at least 3 elements.
 
-##### Requires!
+##### If you want to create multiple palettes. You must enter the properties of the palette in array type.
 
-- A color code in hex format must be entered. Must have a '#' at the beginning.
-
-- Color must be 3 characters or 6 characters. without the '#'.
-
-#### Second Param : primary
-
-whatever you want to make the name of your palette.
-
-##### Requires!
-
-- must be at least 2 characters long.
-
-#### Last Param : 500
-
-You can specify from what time the main color of your palette starts.
-
-##### Requires!
-
-- main color can only be 50, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
-
-
-## Example
+`Example:`
 
 ```js
-const getPalette = require('./index');
-
-const palette = getPalette("#ffbd00","primary", 500);
-
-const primary = palette.palette;
-
-const paletteName = palette.name;
-
-const paletteDefaultColor = palette.defaultColor;
-
-const paletteMainShade = palette.mainShade;
-
-console.log(primary);
-console.log("Palette Name : " + paletteName);
-console.log("Palette Default Color : " + paletteDefaultColor);
-console.log("Palette Main Shade " + paletteMainShade);
+const palette = getPalette([
+  {
+    color: "rgb(255, 189, 0)", // required
+    name: "primary", // required
+    shade: 400
+  },
+  {
+    color: "rgba(255, 189, 0, 1)", // required
+    name: "secondary", // required
+    shade: 500
+  },
+  {
+    color: "hsl(44, 100%, 50%)", // required
+    name: "tertiary", // required
+    shade: 600
+  },
+  {
+    color: "#FFBD00", // required
+    name: "quaternary", // required
+    shade: 300, // you will set shades is mandatory
+    shades: [100, 200, 300, 400, 500]
+  }
+]);
 ```
 
-## Output
-![output](https://i.hizliresim.com/e43l1g5.jpg)
+##### If you will create a palette you can give parameters as json data.
 
-## 🚀 What did i use?
+`Example:`
+
+```js
+const objectPalette = getPalette({
+  color: "#FFBD00", // required
+  name: "primary", // required
+  shade: 300, // you will set shaders is mandatory
+  shades: [100, 200, 300, 400, 500]
+});
+```
+
+`Output:`
+
+![Output](https://i.hizliresim.com/d0a5le6.jpg)
+
+##### If you don't want to deal with parameters and you only have one color, you can create a palette by sending the string color as a parameter.
+
+`Example:`
+
+```js
+const stringPalette = getPalette("#FFBD00");
+```
+
+`Output:`
+
+![Output](https://i.hizliresim.com/syut90f.jpg)
+
+## 🚀 Dependencies
 
 - [chroma.js](https://gka.github.io/chroma.js/)
