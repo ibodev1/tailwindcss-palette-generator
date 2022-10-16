@@ -7,7 +7,7 @@
     "lib": "./index.js"
   },
   "scripts": {
-    "test": "node example.js",
+    "test": "jest",
     "postversion": "git push origin main && git push origin --tags main && yarn publish --access public && git push && echo \"Successfully\""
   },
   "engines": {
