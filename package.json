@@ -4,11 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "directories": {
-    "lib": "./index.js"
+    "lib": "./src/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "test": "jest",
-    "postversion": "git push origin main && git push origin --tags main && yarn publish --access public && git push && echo \"Successfully\""
+    "postversion": "git push origin main && git push origin --tags main && yarn publish --access public"
   },
   "engines": {
     "node": ">=14"
@@ -31,5 +34,16 @@
   "description": "Color palette generation library for TailwindCSS.",
   "dependencies": {
     "chroma-js": "^2.4.2"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=3.0.0 || insiders"
+  },
+  "devDependencies": {
+    "jest": "^29.2.1"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/lib.test.js"
+    ]
   }
 }
