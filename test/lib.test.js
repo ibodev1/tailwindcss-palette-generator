@@ -1,4 +1,4 @@
-const getPalette = require('./index');
+const getPalette = require('../index');
 
 const stringPalette = getPalette("#FFBD00");
 
