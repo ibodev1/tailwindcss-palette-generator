@@ -53,6 +53,15 @@ npm
 
 > npm i tailwindcss-palette-generator
 
+
+[![npm version](https://badge.fury.io/js/tailwindcss-palette-generator.svg)](https://badge.fury.io/js/tailwindcss-palette-generator)
+![NPM](https://img.shields.io/npm/l/tailwindcss-palette-generator)
+![GitHub Repo stars](https://img.shields.io/github/stars/ibodev1/tailwindcss-palette-generator?style=social)
+![node-current](https://img.shields.io/node/v/tailwindcss-palette-generator)
+![GitHub last commit](https://img.shields.io/github/last-commit/ibodev1/tailwindcss-palette-generator)
+![npm](https://img.shields.io/npm/dw/tailwindcss-palette-generator)
+![GitHub top language](https://img.shields.io/github/languages/top/ibodev1/tailwindcss-palette-generator)
+
 ## 👀 Usage
 
 ### Import
