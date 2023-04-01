@@ -4,10 +4,6 @@ interface Palette {
     shade?: number;
     shades?: number[];
 }
-declare const getPalette: (params?: Palette[] | Palette | string) => {
-    [key: string]: string;
-} | {
-    [key: string]: string;
-}[] | undefined;
+declare const getPalette: (params?: Palette[] | Palette | string) => any;
 
 export { Palette, getPalette as default };

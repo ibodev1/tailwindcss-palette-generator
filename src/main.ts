@@ -107,8 +107,8 @@ const main = {
 
 const getPalette = (
   params: Palette[] | Palette | string = main.state.initialParams
-): {[key: string]: string} | {[key: string]: string}[] | undefined => {
-  let palette: {[key: string]: string} | {[key: string]: string}[] = {};
+): any => {
+  let palette: any = {};
   main.state.primaryColor = "#FFBD00";
   main.state.mainShade = 500;
   main.state.shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
