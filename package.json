@@ -1,19 +1,26 @@
 {
   "name": "tailwindcss-palette-generator",
   "version": "0.2.5",
-  "main": "./src/index.js",
+  "main": "./dist/main.js",
+  "module": "./dist/main.js",
   "license": "MIT",
   "type": "module",
   "directories": {
-    "lib": "./src/index.js"
+    "lib": "./dist/main.js"
   },
   "publishConfig": {
+    "exports": {
+      ".": "./dist/main.js"
+    },
+    "types": "./dist/index.d.ts",
     "access": "public"
   },
   "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -cw",
     "test": "jest",
-    "prepublishOnly": "yarn test",
-    "postversion": "git push origin main && git push origin --tags main && yarn publish --access public"
+    "prepublish": "pnpm test && pnpm build",
+    "postversion": "pnpm publish --access public"
   },
   "engines": {
     "node": ">=14"
@@ -41,11 +48,16 @@
     "tailwindcss": ">=3.0.0 || insiders"
   },
   "devDependencies": {
-    "jest": "^29.2.1"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/test/lib.test.js"
-    ]
+    "@types/chroma-js": "^2.4.0",
+    "@types/jest": "^29.5.0",
+    "babel-jest": "^29.5.0",
+    "esbuild": "^0.17.14",
+    "jest": "29.5.0",
+    "rollup": "^3.20.2",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
   }
 }

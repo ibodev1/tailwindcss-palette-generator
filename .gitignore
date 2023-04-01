@@ -31,7 +31,3 @@ $RECYCLE.BIN/
 ## Project-specific
 .idea/
 build/
-dist/
-
-# released
-tailwindcss-palette-generator.js
