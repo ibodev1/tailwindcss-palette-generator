@@ -1,36 +1,37 @@
-![tailwind](https://i.hizliresim.com/abke1nw.png)
+![tailwind](https://i.hizliresim.com/q9dulw0.png)
 
 ### Next.js + tailwind.config.js usage example.
 
 ```js
-const getPalette = require("tailwindcss-palette-generator");
+/** @type {import('tailwindcss').Config} */
+import getPalette from "tailwindcss-palette-generator";
 
 const palette = getPalette([
   {
-    color: "rgb(255, 189, 0)", // required
-    name: "primary", // required
-    shade: 400
+    color: "#264653",
+    name: "primary"
   },
   {
-    color: "rgba(255, 189, 0, 1)", // required
-    name: "secondary", // required
-    shade: 500
+    color: "#2a9d8f",
+    name: "secondary"
   },
   {
-    color: "hsl(44, 100%, 50%)", // required
-    name: "tertiary", // required
-    shade: 600
+    color: "#e9c46a",
+    name: "sun"
   },
   {
-    color: "#FFBD00", // required
-    name: "quaternary", // required
-    shade: 300, // you will set shaders is mandatory
-    shades: [100, 200, 300, 400, 500]
+    color: "#f4a261",
+    name: "lightorange"
+  },
+  {
+    color: "#e76f51",
+    name: "orange"
   }
 ]);
 
 module.exports = {
   content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}"
   ],
@@ -45,14 +46,17 @@ module.exports = {
 
 ## 🎉 Installation
 
+pnpm
+
+> pnpm add -D tailwindcss-palette-generator@latest
+
 yarn
 
-> yarn add tailwindcss-palette-generator
+> yarn add --dev tailwindcss-palette-generator@latest
 
 npm
 
-> npm i tailwindcss-palette-generator
-
+> npm i --save-dev tailwindcss-palette-generator@latest
 
 [![npm version](https://badge.fury.io/js/tailwindcss-palette-generator.svg)](https://badge.fury.io/js/tailwindcss-palette-generator)
 ![NPM](https://img.shields.io/npm/l/tailwindcss-palette-generator)
@@ -67,7 +71,7 @@ npm
 ### Import
 
 ```js
-const getPalette = require("tailwindcss-palette-generator");
+import getPalette from "tailwindcss-palette-generator";
 ```
 
 ### getPalette()
