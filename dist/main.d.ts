@@ -1,5 +1,5 @@
 /**
- * tailwindcss-palette-generator v0.4.0
+ * tailwindcss-palette-generator v0.4.2
  * Copyright 2023 @ibodev1 <github.com/ibodev1>
  */
 
