@@ -1,3 +1,4 @@
+/** @type {import('rollup').RollupOptions} */
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
@@ -14,6 +15,11 @@ const settings = {
     "chroma-js": "chroma-js"
   }
 };
+
+const banner = `
+${packageJson.name} v${packageJson.version}
+Copyright <%=moment().format('YYYY')%> ${packageJson.author}
+`
 
 export default [
   {
@@ -55,17 +61,12 @@ export default [
         ignoreGlobal: false,
         sourceMap: false
       }),
-      license({
-        banner: `
-          ${packageJson.name} v${packageJson.version}
-          Copyright <%=moment().format('YYYY')%> ${packageJson.author}
-        `
-      })
+      license({ banner })
     ]
   },
   {
     input: "src/main.ts",
-    plugins: [dts.default()],
+    plugins: [dts(), license({ banner })],
     output: {
       file: `dist/main.d.ts`,
       format: "es"

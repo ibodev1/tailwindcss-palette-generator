@@ -1,3 +1,8 @@
+/**
+ * tailwindcss-palette-generator v0.4.0
+ * Copyright 2023 @ibodev1 <github.com/ibodev1>
+ */
+
 interface Palette {
     name: string;
     color: string;

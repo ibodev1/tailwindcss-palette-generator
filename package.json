@@ -18,8 +18,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production rollup -c --bundleConfigAsCjs",
-    "dev": "rollup -c -w --bundleConfigAsCjs",
+    "build": "cross-env NODE_ENV=production rollup -c rollup.config.ts --configPlugin typescript",
+    "dev": "rollup -c rollup.config.ts --configPlugin typescript -w",
     "test": "jest",
     "prepublish": "pnpm test && pnpm build",
     "postversion": "pnpm publish --access public"

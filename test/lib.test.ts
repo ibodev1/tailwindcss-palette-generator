@@ -1,4 +1,4 @@
-import getPalette from "../src/main.ts";
+import getPalette from "../src/main";
 
 const stringPalette = getPalette("#FFBD00");
 
