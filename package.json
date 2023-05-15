@@ -8,11 +8,12 @@
   "directories": {
     "lib": "./dist/main.js"
   },
+  "types": "./dist/main.d.ts",
   "publishConfig": {
     "exports": {
       ".": "./dist/main.js"
     },
-    "types": "./dist/index.d.ts",
+    "types": "./dist/main.d.ts",
     "access": "public"
   },
   "scripts": {
