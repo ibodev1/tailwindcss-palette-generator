@@ -1,31 +1,74 @@
+import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
+import resolve from "@rollup/plugin-node-resolve";
+import typescript from "@rollup/plugin-typescript";
+import terser from "@rollup/plugin-terser";
+import license from "rollup-plugin-license";
 import dts from "rollup-plugin-dts";
-import esbuild from "rollup-plugin-esbuild";
 import packageJson from "./package.json" assert { type: "json" };
 
-const name = packageJson.main.replace(/\.js$/, "");
+const isProduction = process.env.NODE_ENV === "production";
 
-const bundle = (config) => ({
-  ...config,
-  input: "src/main.ts",
-  external: (id) => !/^[./]/.test(id)
-});
+const settings = {
+  globals: {
+    "chroma-js": "chroma-js"
+  }
+};
 
 export default [
-  bundle({
-    plugins: [esbuild()],
+  {
+    input: "./src/main.ts",
     output: [
       {
-        file: `${name}.js`,
-        format: "es",
-        sourcemap: true
+        file: packageJson.main,
+        name: packageJson.main,
+        ...settings,
+        format: "cjs",
+        plugins: [isProduction && terser()]
+      },
+      {
+        file: packageJson.module,
+        ...settings,
+        name: packageJson.name,
+        format: "es"
+      },
+      {
+        file: packageJson.browser,
+        ...settings,
+        name: packageJson.name,
+        format: "umd"
       }
+    ],
+    external: ["chroma-js"],
+    plugins: [
+      json(),
+      resolve({
+        jsnext: true,
+        main: true
+      }),
+      typescript({
+        sourceMap: false
+      }),
+      commonjs({
+        include: "node_modules/**",
+        extensions: [".js"],
+        ignoreGlobal: false,
+        sourceMap: false
+      }),
+      license({
+        banner: `
+          ${packageJson.name} v${packageJson.version}
+          Copyright <%=moment().format('YYYY')%> ${packageJson.author}
+        `
+      })
     ]
-  }),
-  bundle({
-    plugins: [dts()],
+  },
+  {
+    input: "src/main.ts",
+    plugins: [dts.default()],
     output: {
-      file: `${name}.d.ts`,
+      file: `dist/main.d.ts`,
       format: "es"
     }
-  })
+  }
 ];

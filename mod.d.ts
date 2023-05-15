@@ -1,0 +1,5 @@
+declare module "rollup-plugin-license"
+declare module "@rollup/plugin-terser"
+declare module "@rollup/plugin-node-resolve"
+declare module "@rollup/plugin-json"
+declare module "@rollup/plugin-commonjs"

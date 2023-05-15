@@ -4,6 +4,7 @@ interface Palette {
     shade?: number;
     shades?: number[];
 }
-declare const getPalette: (params?: Palette[] | Palette | string) => any;
 
-export { Palette, getPalette as default };
+declare const getPalette: (params: Palette[] | Palette | string) => any;
+
+export { getPalette as default };

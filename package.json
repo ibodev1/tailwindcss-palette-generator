@@ -1,24 +1,25 @@
 {
   "name": "tailwindcss-palette-generator",
   "version": "0.3.0",
-  "main": "./dist/main.js",
-  "module": "./dist/main.js",
   "license": "MIT",
   "type": "module",
+  "main": "dist/main.min.js",
+  "module": "dist/main.esm.js",
+  "browser": "dist/main.umd.js",
+  "types": "dist/main.d.ts",
   "directories": {
-    "lib": "./dist/main.js"
+    "lib": "dist/main.js"
   },
-  "types": "./dist/main.d.ts",
   "publishConfig": {
     "exports": {
-      ".": "./dist/main.js"
+      ".": "dist/main.js"
     },
-    "types": "./dist/main.d.ts",
+    "types": "dist/main.d.ts",
     "access": "public"
   },
   "scripts": {
-    "build": "rollup -c",
-    "start": "rollup -cw",
+    "build": "cross-env NODE_ENV=production rollup -c --bundleConfigAsCjs",
+    "dev": "rollup -c -w --bundleConfigAsCjs",
     "test": "jest",
     "prepublish": "pnpm test && pnpm build",
     "postversion": "pnpm publish --access public"
@@ -40,7 +41,7 @@
     "tailwindcss",
     "tailwindcss palette generator"
   ],
-  "author": "İbrahim Ödev <ibrahimodev42@gmail.com>",
+  "author": "@ibodev1 <github.com/ibodev1>",
   "description": "Color palette generation library for TailwindCSS.",
   "dependencies": {
     "chroma-js": "^2.4.2"
@@ -49,16 +50,25 @@
     "tailwindcss": ">=3.0.0 || insiders"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@rollup/plugin-terser": "^0.4.1",
+    "@rollup/plugin-typescript": "^11.1.1",
     "@types/chroma-js": "^2.4.0",
     "@types/jest": "^29.5.0",
+    "@types/node": "^20.1.4",
     "babel-jest": "^29.5.0",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.17.14",
     "jest": "29.5.0",
     "rollup": "^3.20.2",
     "rollup-plugin-dts": "^5.3.0",
     "rollup-plugin-esbuild": "^5.0.0",
+    "rollup-plugin-license": "^3.0.1",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
     "typescript": "^5.0.2"
   }
 }
