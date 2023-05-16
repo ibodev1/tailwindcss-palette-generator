@@ -2,6 +2,8 @@ import getPalette from "../src/main";
 
 const stringPalette = getPalette("#FFBD00");
 
+const colorNameStringPalette = getPalette("olivedrab");
+
 const objectPalette = getPalette({
   color: "#FFBD00", // required
   name: "primary", // required
@@ -38,6 +40,22 @@ const stringPaletteReturn = {
     DEFAULT: "#ffbd00"
   }
 };
+
+const colorNameStringPaletteReturn = {
+  primary: {
+    '50': '#dcfe8e',
+    '100': '#cff182',
+    '200': '#b5d76a',
+    '300': '#9cbe53',
+    '400': '#83a63b',
+    '500': '#6b8e23',
+    '600': '#537704',
+    '700': '#3c6000',
+    '800': '#264b00',
+    '900': '#183600',
+    DEFAULT: '#6b8e23'
+  }
+}
 
 const objectPaletteReturn = {
   primary: {
@@ -76,6 +94,10 @@ const arrayPaletteReturn = {
 
 test("return string palette", () => {
   expect(stringPalette).toEqual(stringPaletteReturn);
+});
+
+test("return color name string palette", () => {
+  expect(colorNameStringPalette).toEqual(colorNameStringPaletteReturn);
 });
 
 test("return object palette", () => {
