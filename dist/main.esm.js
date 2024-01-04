@@ -1,6 +1,6 @@
 /**
- * tailwindcss-palette-generator v0.4.5
- * Copyright 2023 @ibodev1 <github.com/ibodev1>
+ * tailwindcss-palette-generator v0.5.0
+ * Copyright 2024 @ibodev1 <github.com/ibodev1>
  */
 
 import chroma from 'chroma-js';

@@ -48,10 +48,7 @@ export default [
     external: ["chroma-js"],
     plugins: [
       json(),
-      resolve({
-        jsnext: true,
-        main: true
-      }),
+      resolve(),
       typescript({
         sourceMap: false
       }),
