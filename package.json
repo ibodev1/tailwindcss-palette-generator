@@ -21,7 +21,9 @@
     "dev": "rollup -c rollup.config.ts --configPlugin typescript -w",
     "test": "jest",
     "prepublish": "pnpm test && pnpm build",
-    "postversion": "pnpm publish --access public"
+    "postversion": "pnpm publish --access public",
+    "check": "npx @biomejs/biome check .",
+    "check:fix": "npx @biomejs/biome check --apply ."
   },
   "engines": {
     "node": ">=14"
@@ -49,6 +51,7 @@
     "tailwindcss": ">=3.4.0 || insiders"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.6.0",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
