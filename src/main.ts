@@ -1,10 +1,9 @@
 import chroma from 'chroma-js';
 import colorResult from './colorResult';
-import colors from './data/colors';
 import { checkParam, initalOptions } from './helpers';
 import type { IColorResultOptions, Palette } from './types';
 
-const getPalette = (params: Palette[] | Palette | keyof typeof colors | string): any => {
+const getPalette = (params: Palette[] | Palette | string): any => {
   const palette: any = {};
   if (Array.isArray(params)) {
     for (let i = 0; i < params.length; i++) {
@@ -36,16 +35,9 @@ const getPalette = (params: Palette[] | Palette | keyof typeof colors | string):
       shades: initalOptions.shades,
     };
 
-    const stringColor = colors[params as keyof typeof colors];
-    if (colors && stringColor) {
-      options = Object.assign(initalOptions, {
-        primaryColor: stringColor ?? initalOptions.primaryColor,
-      });
-    } else {
-      options = Object.assign(initalOptions, {
-        primaryColor: chroma(params).hex(),
-      });
-    }
+    options = Object.assign(initalOptions, {
+      primaryColor: chroma(params).hex(),
+    });
 
     palette['primary'] = colorResult(options);
   }
