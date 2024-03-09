@@ -13,9 +13,7 @@
     "types": "dist/main.d.ts",
     "access": "public"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "rimraf dist/ && cross-env NODE_ENV=production rollup -c rollup.config.ts --configPlugin typescript",
     "dev": "rollup -c rollup.config.ts --configPlugin typescript -w",
@@ -36,12 +34,7 @@
   "bugs": {
     "url": "https://github.com/ibodev1/tailwindcss-palette-generator/issues"
   },
-  "keywords": [
-    "tailwind",
-    "tailwind palette generator",
-    "tailwindcss",
-    "tailwindcss palette generator"
-  ],
+  "keywords": ["tailwind", "tailwind palette generator", "tailwindcss", "tailwindcss palette generator"],
   "author": "@ibodev1 <github.com/ibodev1>",
   "description": "Color palette generation library for TailwindCSS.",
   "dependencies": {

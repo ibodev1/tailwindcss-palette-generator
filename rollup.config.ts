@@ -1,72 +1,72 @@
 /** @type {import('rollup').RollupOptions} */
-import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
-import resolve from "@rollup/plugin-node-resolve";
-import typescript from "@rollup/plugin-typescript";
-import terser from "@rollup/plugin-terser";
-import license from "rollup-plugin-license";
-import dts from "rollup-plugin-dts";
-import packageJson from "./package.json" assert { type: "json" };
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import resolve from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
+import typescript from '@rollup/plugin-typescript';
+import dts from 'rollup-plugin-dts';
+import license from 'rollup-plugin-license';
+import packageJson from './package.json' assert { type: 'json' };
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 const settings = {
   globals: {
-    "chroma-js": "chroma-js"
-  }
+    'chroma-js': 'chroma-js',
+  },
 };
 
 const banner = `
 ${packageJson.name} v${packageJson.version}
 Copyright <%=moment().format('YYYY')%> ${packageJson.author}
-`
+`;
 
 export default [
   {
-    input: "./src/main.ts",
+    input: './src/main.ts',
     output: [
       {
         file: packageJson.main,
         name: packageJson.main,
         ...settings,
-        format: "cjs",
-        plugins: [isProduction && terser()]
+        format: 'cjs',
+        plugins: [isProduction && terser()],
       },
       {
         file: packageJson.module,
         ...settings,
         name: packageJson.name,
-        format: "es"
+        format: 'es',
       },
       {
         file: packageJson.browser,
         ...settings,
         name: packageJson.name,
-        format: "umd"
-      }
+        format: 'umd',
+      },
     ],
-    external: ["chroma-js"],
+    external: ['chroma-js'],
     plugins: [
       json(),
       resolve(),
       typescript({
-        sourceMap: false
+        sourceMap: false,
       }),
       commonjs({
-        include: "node_modules/**",
-        extensions: [".js"],
+        include: 'node_modules/**',
+        extensions: ['.js'],
         ignoreGlobal: false,
-        sourceMap: false
+        sourceMap: false,
       }),
-      license({ banner })
-    ]
+      license({ banner }),
+    ],
   },
   {
-    input: "src/main.ts",
+    input: 'src/main.ts',
     plugins: [dts(), license({ banner })],
     output: {
       file: `dist/main.d.ts`,
-      format: "es"
-    }
-  }
+      format: 'es',
+    },
+  },
 ];

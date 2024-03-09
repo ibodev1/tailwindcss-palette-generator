@@ -1,44 +1,44 @@
-import getPalette from "../src/main";
+import getPalette from '../src/main';
 
-const stringPalette = getPalette("#FFBD00");
+const stringPalette = getPalette('#FFBD00');
 
-const colorNameStringPalette = getPalette("olivedrab");
+const colorNameStringPalette = getPalette('olivedrab');
 
 const objectPalette = getPalette({
-  color: "#FFBD00", // required
-  name: "primary", // required
+  color: '#FFBD00', // required
+  name: 'primary', // required
   shade: 300, // you will set shaders is mandatory
-  shades: [100, 200, 300, 400, 500]
+  shades: [100, 200, 300, 400, 500],
 });
 
 const arrayPalette = getPalette([
   {
-    color: "rgb(255, 189, 0)", // required
-    name: "primary", // required
-    shade: 400
+    color: 'rgb(255, 189, 0)', // required
+    name: 'primary', // required
+    shade: 400,
   },
   {
-    color: "#FFBD00", // required
-    name: "secondary", // required
+    color: '#FFBD00', // required
+    name: 'secondary', // required
     shade: 300, // you will set shades is mandatory
-    shades: [100, 200, 300, 400, 500]
-  }
+    shades: [100, 200, 300, 400, 500],
+  },
 ]);
 
 const stringPaletteReturn = {
   primary: {
-    "50": "#ffff90",
-    "100": "#ffff83",
-    "200": "#ffff69",
-    "300": "#ffef4e",
-    "400": "#ffd630",
-    "500": "#ffbd00",
-    "600": "#e3a500",
-    "700": "#c78d00",
-    "800": "#ab7600",
-    "900": "#916000",
-    DEFAULT: "#ffbd00"
-  }
+    '50': '#ffff90',
+    '100': '#ffff83',
+    '200': '#ffff69',
+    '300': '#ffef4e',
+    '400': '#ffd630',
+    '500': '#ffbd00',
+    '600': '#e3a500',
+    '700': '#c78d00',
+    '800': '#ab7600',
+    '900': '#916000',
+    DEFAULT: '#ffbd00',
+  },
 };
 
 const colorNameStringPaletteReturn = {
@@ -53,57 +53,57 @@ const colorNameStringPaletteReturn = {
     '700': '#3c6000',
     '800': '#264b00',
     '900': '#183600',
-    DEFAULT: '#6b8e23'
-  }
-}
+    DEFAULT: '#6b8e23',
+  },
+};
 
 const objectPaletteReturn = {
   primary: {
-    "100": "#ffef4e",
-    "200": "#ffd630",
-    "300": "#ffbd00",
-    "400": "#e3a500",
-    "500": "#c78d00",
-    DEFAULT: "#ffbd00"
-  }
+    '100': '#ffef4e',
+    '200': '#ffd630',
+    '300': '#ffbd00',
+    '400': '#e3a500',
+    '500': '#c78d00',
+    DEFAULT: '#ffbd00',
+  },
 };
 
 const arrayPaletteReturn = {
   primary: {
-    "50": "#ffff76",
-    "100": "#ffff69",
-    "200": "#ffef4e",
-    "300": "#ffd630",
-    "400": "#ffbd00",
-    "500": "#e3a500",
-    "600": "#c78d00",
-    "700": "#ab7600",
-    "800": "#916000",
-    "900": "#784b00",
-    DEFAULT: "#ffbd00"
+    '50': '#ffff76',
+    '100': '#ffff69',
+    '200': '#ffef4e',
+    '300': '#ffd630',
+    '400': '#ffbd00',
+    '500': '#e3a500',
+    '600': '#c78d00',
+    '700': '#ab7600',
+    '800': '#916000',
+    '900': '#784b00',
+    DEFAULT: '#ffbd00',
   },
   secondary: {
-    "100": "#ffef4e",
-    "200": "#ffd630",
-    "300": "#ffbd00",
-    "400": "#e3a500",
-    "500": "#c78d00",
-    DEFAULT: "#ffbd00"
-  }
+    '100': '#ffef4e',
+    '200': '#ffd630',
+    '300': '#ffbd00',
+    '400': '#e3a500',
+    '500': '#c78d00',
+    DEFAULT: '#ffbd00',
+  },
 };
 
-test("return string palette", () => {
+test('return string palette', () => {
   expect(stringPalette).toEqual(stringPaletteReturn);
 });
 
-test("return color name string palette", () => {
+test('return color name string palette', () => {
   expect(colorNameStringPalette).toEqual(colorNameStringPaletteReturn);
 });
 
-test("return object palette", () => {
+test('return object palette', () => {
   expect(objectPalette).toEqual(objectPaletteReturn);
 });
 
-test("return array palette", () => {
+test('return array palette', () => {
   expect(arrayPalette).toEqual(arrayPaletteReturn);
 });

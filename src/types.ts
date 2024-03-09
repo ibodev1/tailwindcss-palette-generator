@@ -1,12 +1,12 @@
 export interface IColorResultOptions {
-    primaryColor: string;
-    mainShade: number;
-    shades: number[]
+  primaryColor: string;
+  mainShade: number;
+  shades: number[];
 }
 
 export interface Palette {
-    name: string;
-    color: string;
-    shade?: number;
-    shades?: number[];
+  name: string;
+  color: string;
+  shade?: number;
+  shades?: number[];
 }
