@@ -3,44 +3,48 @@ import colorResult from './colorResult';
 import { checkParam, initalOptions } from './helpers';
 import type { IColorResultOptions, Palette } from './types';
 
-const getPalette = (params: Palette[] | Palette | string): any => {
-  const palette: any = {};
-  if (Array.isArray(params)) {
-    for (let i = 0; i < params.length; i++) {
-      const colorPalette = params[i];
-      if (checkParam(colorPalette)) {
-        const options: IColorResultOptions = {
-          mainShade: colorPalette.shade ?? initalOptions.mainShade,
-          primaryColor: chroma(colorPalette.color).hex() ?? initalOptions.primaryColor,
-          shades: colorPalette.shades ?? initalOptions.shades,
-        };
+const getPalette = (params: Palette[] | Palette | string): Record<string, Record<string, string>> => {
+  const palette: Record<string, Record<string, string>> = {};
 
-        palette[colorPalette.name] = colorResult(options);
+  const generateColorPalette = (options: IColorResultOptions): Record<string, string> => {
+    return colorResult(options);
+  };
+
+  const getColorOptions = (colorPalette: Palette): IColorResultOptions => {
+    const { color, shade, shades } = colorPalette;
+
+    return {
+      mainShade: shade ?? initalOptions.mainShade,
+      primaryColor: chroma(color).hex() ?? initalOptions.primaryColor,
+      shades: shades ?? initalOptions.shades,
+    };
+  };
+
+  const addPalette = (name: string, options: IColorResultOptions) => {
+    palette[name] = generateColorPalette(options);
+  };
+
+  if (Array.isArray(params)) {
+    for (const colorPalette of params) {
+      if (checkParam(colorPalette)) {
+        const options = getColorOptions(colorPalette);
+        addPalette(colorPalette.name, options);
       }
     }
   } else if (typeof params !== 'string' && !Array.isArray(params)) {
     if (checkParam(params)) {
-      const options: IColorResultOptions = {
-        mainShade: params.shade ?? initalOptions.mainShade,
-        primaryColor: chroma(params.color).hex() ?? initalOptions.primaryColor,
-        shades: params.shades ?? initalOptions.shades,
-      };
-
-      palette[params.name] = colorResult(options);
+      const options = getColorOptions(params);
+      addPalette(params.name, options);
     }
   } else if (typeof params === 'string') {
-    let options: IColorResultOptions = {
+    const options: IColorResultOptions = {
       mainShade: initalOptions.mainShade,
-      primaryColor: initalOptions.primaryColor,
+      primaryColor: chroma(params).hex(),
       shades: initalOptions.shades,
     };
-
-    options = Object.assign(initalOptions, {
-      primaryColor: chroma(params).hex(),
-    });
-
-    palette['primary'] = colorResult(options);
+    addPalette('primary', options);
   }
+
   return palette;
 };
 
