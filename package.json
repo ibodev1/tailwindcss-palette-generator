@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss-palette-generator",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "license": "MIT",
   "directories": {
     "lib": "dist/main.js",
