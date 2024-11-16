@@ -1,26 +1,22 @@
-import chroma from 'chroma-js';
-import colorResult from './colorResult';
-import { checkParam, initalOptions } from './helpers';
-import type { IColorResultOptions, Palette } from './types';
+import { initialOptions } from './consts';
+import generateColorPalette from './generateColorPalette';
+import type { ColorResultOptions, Palette, PaletteResult } from './types';
+import { checkParam, getHexColor, isColor } from './utils';
 
-const getPalette = (params: Palette[] | Palette | string): Record<string, Record<string, string>> => {
-  const palette: Record<string, Record<string, string>> = {};
+export const getPalette = (params: Palette[] | Palette | string): PaletteResult => {
+  const palette: PaletteResult = {};
 
-  const generateColorPalette = (options: IColorResultOptions): Record<string, string> => {
-    return colorResult(options);
-  };
-
-  const getColorOptions = (colorPalette: Palette): IColorResultOptions => {
+  const getColorOptions = (colorPalette: Palette): ColorResultOptions => {
     const { color, shade, shades } = colorPalette;
 
     return {
-      mainShade: shade ?? initalOptions.mainShade,
-      primaryColor: chroma(color).hex() ?? initalOptions.primaryColor,
-      shades: shades ?? initalOptions.shades,
+      mainShade: shade ?? initialOptions.mainShade,
+      primaryColor: getHexColor(color),
+      shades: shades ?? initialOptions.shades,
     };
   };
 
-  const addPalette = (name: string, options: IColorResultOptions) => {
+  const addPalette = (name: string, options: ColorResultOptions) => {
     palette[name] = generateColorPalette(options);
   };
 
@@ -31,16 +27,16 @@ const getPalette = (params: Palette[] | Palette | string): Record<string, Record
         addPalette(colorPalette.name, options);
       }
     }
-  } else if (typeof params !== 'string' && !Array.isArray(params)) {
+  } else if (typeof params === 'object' && params !== null) {
     if (checkParam(params)) {
       const options = getColorOptions(params);
       addPalette(params.name, options);
     }
-  } else if (typeof params === 'string') {
-    const options: IColorResultOptions = {
-      mainShade: initalOptions.mainShade,
-      primaryColor: chroma(params).hex(),
-      shades: initalOptions.shades,
+  } else if (typeof params === 'string' && isColor(params)) {
+    const options: ColorResultOptions = {
+      mainShade: initialOptions.mainShade,
+      primaryColor: getHexColor(params),
+      shades: initialOptions.shades,
     };
     addPalette('primary', options);
   }

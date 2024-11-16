@@ -13,15 +13,18 @@
   "main": "./dist/main.js",
   "module": "./dist/main.mjs",
   "types": "./dist/main.d.ts",
-  "files": ["dist", "src"],
+  "files": ["dist"],
   "scripts": {
-    "build": "rimraf dist/ && cross-env NODE_ENV=production tsup src/main.ts",
+    "build": "npm run clean && tsup src/main.ts",
     "dev": "tsup --watch",
     "test": "jest",
     "prepublish": "npm run test && npm run build",
     "postversion": "npm publish --access public",
-    "check": "npx @biomejs/biome check .",
-    "check:fix": "npx @biomejs/biome check --write ."
+    "clean": "rimraf dist/",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "lint": "biome lint --write ."
   },
   "engines": {
     "node": ">=18"
@@ -38,24 +41,24 @@
   "author": "@ibodev1 <github.com/ibodev1>",
   "description": "Color palette generation library for TailwindCSS.",
   "dependencies": {
-    "chroma-js": "^2.4.2"
+    "chroma-js": "^3.1.2"
   },
   "peerDependencies": {
     "tailwindcss": ">=3.4.0 || insiders"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
+    "@biomejs/biome": "^1.9.4",
+    "@swc/core": "^1.9.2",
     "@types/chroma-js": "^2.4.4",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^22.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.9.0",
     "babel-jest": "^29.7.0",
-    "cross-env": "^7.0.3",
     "jest": "29.7.0",
     "rimraf": "^6.0.1",
-    "ts-jest": "^29.2.3",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "tsup": "^8.2.3",
-    "typescript": "^5.5.4"
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3"
   },
-  "packageManager": "pnpm@9.6.0"
+  "packageManager": "pnpm@9.13.2"
 }
