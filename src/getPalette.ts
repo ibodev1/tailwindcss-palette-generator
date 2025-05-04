@@ -43,5 +43,3 @@ export const getPalette = (params: Palette[] | Palette | string): PaletteResult 
 
   return palette;
 };
-
-export default getPalette;

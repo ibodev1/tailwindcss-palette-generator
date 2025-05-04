@@ -1,4 +1,8 @@
-import getPalette from '../src/main';
+import { getPalette } from '../src';
+
+import path from 'node:path';
+import tailwindcssPostCSS from '@tailwindcss/postcss';
+import postcss from 'postcss';
 
 const stringPalette = getPalette('#FFBD00');
 
@@ -84,4 +88,33 @@ test('return object palette', () => {
 
 test('return array palette', () => {
   expect(arrayPalette).toEqual(arrayPaletteReturn);
+});
+
+// PostCSS test
+
+const runPostCSS = (css: string) => {
+  const { currentTestName } = expect.getState();
+
+  return postcss(tailwindcssPostCSS({ optimize: false })).process(["@import 'tailwindcss';", css].join('\n'), {
+    from: `${path.resolve(__filename)}?test=${currentTestName}`,
+  });
+};
+
+test('TailwindCSS Plugin Test', async () => {
+  const css = `
+@plugin 'tailwindcss-palette-generator' {
+  primary: '#FFBD00';
+}
+
+.test {
+  @apply border-primary text-primary-100 bg-primary-200;
+}
+  `.trim();
+
+  const { css: output } = await runPostCSS(css);
+
+  expect(output).toContain('.test');
+  expect(output).toContain('border-color: #ffbd00;');
+  expect(output).toContain('background-color: #ffff69;');
+  expect(output).toContain('color: #ffff83;');
 });
