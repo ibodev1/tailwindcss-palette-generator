@@ -2,29 +2,18 @@ import createPlugin from 'tailwindcss/plugin';
 import { initialOptions } from './consts';
 import { getPalette } from './getPalette';
 import type { Palette } from './types';
-import { convertResultToCSS } from './utils';
+import { convertResultToCSS, getPalettesFromOptions } from './utils';
 
 export * from './getPalette';
 
 type PluginWithOptions = ReturnType<typeof createPlugin.withOptions<Record<string, string>>>;
 
 const paletteGeneratorPlugin: PluginWithOptions = createPlugin.withOptions<Record<string, string>>(
-  (options = {}) =>
-    ({ addBase }) => {
+  (options = {}) => {
+    return function ({ addBase }) {
       if (!options) return;
 
-      const palettes: Palette[] = [];
-
-      for (const [key, value] of Object.entries(options)) {
-        const palette: Palette = {
-          name: key,
-          color: value,
-          shade: initialOptions.mainShade,
-          shades: initialOptions.shades,
-        };
-
-        palettes.push(palette);
-      }
+      const palettes = getPalettesFromOptions(options);
 
       if (palettes.length > 0) {
         const result = getPalette(palettes);
@@ -33,22 +22,12 @@ const paletteGeneratorPlugin: PluginWithOptions = createPlugin.withOptions<Recor
           ':root': css,
         });
       }
-    },
+    };
+  },
   (options = {}) => {
     if (!options) return {};
 
-    const palettes: Palette[] = [];
-
-    for (const [key, value] of Object.entries(options)) {
-      const palette: Palette = {
-        name: key,
-        color: value,
-        shade: initialOptions.mainShade,
-        shades: initialOptions.shades,
-      };
-
-      palettes.push(palette);
-    }
+    const palettes = getPalettesFromOptions(options);
 
     if (palettes.length > 0) {
       const result = getPalette(palettes);

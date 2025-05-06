@@ -54,6 +54,23 @@ export const checkParam = (palette: Palette): boolean => {
   return true;
 };
 
+export const getPalettesFromOptions = (options: Record<string, string>): Palette[] => {
+  const palettes: Palette[] = [];
+
+  for (const [key, value] of Object.entries(options)) {
+    const palette: Palette = {
+      name: key,
+      color: value,
+      shade: initialOptions.mainShade,
+      shades: initialOptions.shades,
+    };
+
+    palettes.push(palette);
+  }
+
+  return palettes;
+};
+
 export const convertResultToCSS = (result: PaletteResult): Record<string, string> => {
   const colors: Record<string, string> = {};
   for (const [key, color] of Object.entries(result)) {

@@ -15,6 +15,9 @@
       },
       "style": {
         "useEnumInitializers": "off"
+      },
+      "complexity": {
+        "useArrowFunction": "off"
       }
     }
   },
