@@ -1,14 +1,12 @@
 import createPlugin from 'tailwindcss/plugin';
-import { initialOptions } from './consts';
 import { getPalette } from './getPalette';
-import type { Palette } from './types';
 import { convertResultToCSS, getPalettesFromOptions } from './utils';
 
 export * from './getPalette';
 
 type PluginWithOptions = ReturnType<typeof createPlugin.withOptions<Record<string, string>>>;
 
-const paletteGeneratorPlugin: PluginWithOptions = createPlugin.withOptions<Record<string, string>>(
+const pluginFn: PluginWithOptions = createPlugin.withOptions<Record<string, string>>(
   (options = {}) => {
     return function ({ addBase }) {
       if (!options) return;
@@ -45,6 +43,17 @@ const paletteGeneratorPlugin: PluginWithOptions = createPlugin.withOptions<Recor
   },
 );
 
-paletteGeneratorPlugin.__isOptionsFunction = true;
+// is options function
+//! Error: The plugin "tailwindcss-palette-generator" does not accept options
+pluginFn.__isOptionsFunction = true;
+const paletteGeneratorPlugin = Object.assign(pluginFn, {
+  __isOptionsFunction: true,
+}) as PluginWithOptions;
+Object.defineProperty(paletteGeneratorPlugin, '__isOptionsFunction', {
+  value: true,
+  writable: false,
+  configurable: false,
+  enumerable: false,
+});
 
 export default paletteGeneratorPlugin;
