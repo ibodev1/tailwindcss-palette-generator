@@ -18,7 +18,7 @@
     "build": "npm run clean && tsup src/index.ts",
     "dev": "tsup --watch",
     "test": "jest",
-    "prepublish": "npm run test && npm run build",
+    "prepublish": "npm run build && npm run test",
     "postversion": "npm publish --access public",
     "clean": "rimraf dist/",
     "check": "biome check .",
@@ -27,7 +27,7 @@
     "lint": "biome lint --write ."
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "repository": {
     "type": "git",
