@@ -1,6 +1,6 @@
 import chroma from 'chroma-js';
 import { initialOptions } from './consts';
-import type { Palette } from './types';
+import type { Palette, PaletteResult } from './types';
 
 export const isColor = (color: string) => {
   const reg = new RegExp(
@@ -52,4 +52,16 @@ export const checkParam = (palette: Palette): boolean => {
   }
 
   return true;
+};
+
+export const convertResultToCSS = (result: PaletteResult): Record<string, string> => {
+  const colors: Record<string, string> = {};
+  for (const [key, color] of Object.entries(result)) {
+    colors[`--color-${key}`] = color.DEFAULT;
+    for (const [shade, colorValue] of Object.entries(color)) {
+      if (shade === 'DEFAULT') continue;
+      colors[`--color-${key}-${shade}`] = colorValue;
+    }
+  }
+  return colors;
 };
