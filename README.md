@@ -1,48 +1,8 @@
-![tailwind](https://i.hizliresim.com/q9dulw0.png)
+![tailwind](/docs/example.png)
 
-### Next.js + tailwind.config.js usage example.
+# Tailwindcss Palette Generator
 
-```js
-/** @type {import('tailwindcss').Config} */
-import getPalette from "tailwindcss-palette-generator";
-
-const palette = getPalette([
-  {
-    color: "#264653",
-    name: "primary"
-  },
-  {
-    color: "#2a9d8f",
-    name: "secondary"
-  },
-  {
-    color: "#e9c46a",
-    name: "sun"
-  },
-  {
-    color: "#f4a261",
-    name: "lightorange"
-  },
-  {
-    color: "#e76f51",
-    name: "orange"
-  }
-]);
-
-module.exports = {
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}"
-  ],
-  theme: {
-    extend: {
-      colors: palette
-    }
-  },
-  plugins: []
-};
-```
+A plugin for Tailwind CSS that automatically generates color palettes from base colors. Developed specifically for Tailwind CSS v4.
 
 ## 🎉 Installation
 
@@ -68,87 +28,24 @@ npm
 
 ## 👀 Usage
 
-### Import
+This plugin works with Tailwind CSS v4. Add it to your CSS file:
 
-```js
-import getPalette from "tailwindcss-palette-generator";
+```css
+@import "tailwindcss";
+
+@plugin 'tailwindcss-palette-generator' {
+  primary: '#264653';
+  secondary: '#2a9d8f';
+}
 ```
 
-### getPalette()
+This will automatically generate color palettes for your primary and secondary colors with shades ranging from 50 to 900.
 
-```js
-const palette = getPalette(params);
+```html
+<div class="bg-primary-500">Primary color</div>
+<div class="text-secondary-700">Secondary color with darker shade</div>
 ```
-
-#### Params :
-
-- "color" : Main color of your palette. [*Required] (String)
-- "name" : The name of your palette. [*Required] (String)
-- "shade" : What time do you want the main shades of your palette to start and end at. [Optional] (Number)
-- "shades" : Shade layers of your palette. [Optional] (Array)
-  - If you add this you should add main shade as well. "shade:"
-  - Must be of type array.
-  - May consist of at least 3 elements.
-
-##### If you want to create multiple palettes. You must enter the properties of the palette in array type.
-
-`Example:`
-
-```js
-const palette = getPalette([
-  {
-    color: "rgb(255, 189, 0)", // required
-    name: "primary", // required
-    shade: 400
-  },
-  {
-    color: "rgba(255, 189, 0, 1)", // required
-    name: "secondary", // required
-    shade: 500
-  },
-  {
-    color: "hsl(44, 100%, 50%)", // required
-    name: "tertiary", // required
-    shade: 600
-  },
-  {
-    color: "#FFBD00", // required
-    name: "quaternary", // required
-    shade: 300, // you will set shades is mandatory
-    shades: [100, 200, 300, 400, 500]
-  }
-]);
-```
-
-##### If you will create a palette you can give parameters as json data.
-
-`Example:`
-
-```js
-const objectPalette = getPalette({
-  color: "#FFBD00", // required
-  name: "primary", // required
-  shade: 300, // you will set shaders is mandatory
-  shades: [100, 200, 300, 400, 500]
-});
-```
-
-`Output:`
-
-![Output](https://i.hizliresim.com/d0a5le6.jpg)
-
-##### If you don't want to deal with parameters and you only have one color, you can create a palette by sending the string color as a parameter.
-
-`Example:`
-
-```js
-const stringPalette = getPalette("#FFBD00");
-```
-
-`Output:`
-
-![Output](https://i.hizliresim.com/syut90f.jpg)
 
 ## 🚀 Dependencies
 
-- [chroma.js](https://gka.github.io/chroma.js/)
+- [chroma.js](https://gka.github.io/chroma.js/) - Color manipulation library
