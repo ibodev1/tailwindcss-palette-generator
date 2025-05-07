@@ -1,6 +1,6 @@
-![tailwind](/docs/example.png)
-
 # Tailwindcss Palette Generator
+
+![tailwind](/docs/example.png)
 
 A plugin for Tailwind CSS that automatically generates color palettes from base colors. Developed specifically for Tailwind CSS v4.
 
@@ -33,9 +33,9 @@ This plugin works with Tailwind CSS v4. Add it to your CSS file:
 ```css
 @import "tailwindcss";
 
-@plugin 'tailwindcss-palette-generator' {
-  primary: '#264653';
-  secondary: '#2a9d8f';
+@plugin "tailwindcss-palette-generator" {
+  primary: #FFBD00;
+  secondary: #FF6F00;
 }
 ```
 
