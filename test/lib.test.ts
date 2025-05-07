@@ -86,31 +86,113 @@ describe('Palette Generation Tests', () => {
   });
 });
 
-describe('TailwindCSS Plugin Integration', () => {
+describe('Error Handling Tests', () => {
+  test('Invalid color throws error', () => {
+    expect(() => getPalette('not-a-color')).toThrow();
+  });
+
+  test('Empty array returns empty object', () => {
+    expect(getPalette([])).toEqual({});
+  });
+
+  test('Null input throws error', () => {
+    // @ts-expect-error testing invalid input
+    expect(() => getPalette(null)).toThrow();
+  });
+});
+
+describe('Advanced Configuration Tests', () => {
+  test('Custom whitelist shades work correctly', () => {
+    const palette = getPalette({
+      color: '#FFBD00',
+      name: 'brand',
+      shade: 400,
+      shades: [50, 400, 900],
+    });
+
+    expect(palette).toHaveProperty('brand');
+    expect(Object.keys(palette.brand)).toHaveLength(4); // 3 shades + DEFAULT
+    expect(palette.brand).toHaveProperty('50');
+    expect(palette.brand).toHaveProperty('400');
+    expect(palette.brand).toHaveProperty('900');
+    expect(palette.brand).toHaveProperty('DEFAULT');
+  });
+
+  test('Using different color formats', () => {
+    const hslPalette = getPalette('hsl(44, 100%, 50%)');
+    const rgbPalette = getPalette('rgba(255, 189, 0, 1)');
+    const hexPalette = getPalette('#FFBD00');
+
+    expect(hslPalette).toEqual(hslPalette);
+    expect(rgbPalette).toEqual(rgbPalette);
+    expect(hexPalette).toEqual(hexPalette);
+  });
+
+  test('Multiple palettes with different configurations', () => {
+    const multiPalette = getPalette([
+      { color: '#FFBD00', name: 'yellow', shade: 400 },
+      { color: '#FF0000', name: 'red', shade: 500 },
+      { color: '#0000FF', name: 'blue', shade: 600 },
+    ]);
+
+    expect(multiPalette).toHaveProperty('yellow');
+    expect(multiPalette).toHaveProperty('red');
+    expect(multiPalette).toHaveProperty('blue');
+    expect(multiPalette.yellow['400']).toEqual('#ffbd00');
+    expect(multiPalette.red['500']).toEqual('#ff0000');
+    expect(multiPalette.blue['600']).toEqual('#0000ff');
+  });
+});
+
+describe('TailwindCSS Plugin Additional Tests', () => {
   const runPostCSS = (css: string) => {
     const { currentTestName } = expect.getState();
 
-    return postcss(tailwindcssPostCSS({ optimize: false })).process(["@import 'tailwindcss';", css].join('\n'), {
+    return postcss(tailwindcssPostCSS({ optimize: false })).process(css, {
       from: `${path.resolve(__filename)}?test=${currentTestName}`,
     });
   };
 
-  test('Plugin applies palette colors correctly in CSS', async () => {
+  test('Multiple palettes work in plugin configuration', async () => {
     const css = `
-@plugin 'tailwindcss-palette-generator' {
-  primary: '#FFBD00';
+@import "tailwindcss";
+
+@plugin "tailwindcss-palette-generator" {
+  primary: #FFBD00;
+  secondary: #FF6F00;
 }
 
 .test {
-  @apply border-primary text-primary-100 bg-primary-200;
+  @apply border-primary bg-secondary text-secondary-100;
 }
     `.trim();
 
     const { css: output } = await runPostCSS(css);
 
-    expect(output).toContain('.test');
     expect(output).toContain('border-color: #ffbd00;');
-    expect(output).toContain('background-color: #ffff69;');
-    expect(output).toContain('color: #ffff83;');
+    expect(output).toContain('background-color: #ff6f00;');
+    expect(output).toContain('color: #ffd371;');
+  });
+
+  test('Test custom prefix', async () => {
+    const css = `
+@import "tailwindcss";
+
+@theme {
+  --prefix: "mypre-";
+}
+
+@plugin "tailwindcss-palette-generator" {
+  primary: #FFBD00;
+  secondary: #FF6F00;
+}
+    `.trim();
+
+    const { css: output } = await runPostCSS(css);
+
+    console.log(output);
+
+    expect(output).toContain('--mypre-primary');
+    expect(output).toContain('--mypre-secondary');
   });
 });

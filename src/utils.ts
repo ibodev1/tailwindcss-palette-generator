@@ -3,16 +3,8 @@ import { initialOptions } from './consts.js';
 import PaletteError from './palette-error.js';
 import type { Palette, PaletteResult } from './types.js';
 
-export const isColor = (color: string) => {
-  const reg = new RegExp(
-    /^#([\da-f]{3}){1,2}$|^#([\da-f]{6}){1,2}$|(rgb|hsl)a?\((\s*-?\d+%?\s*,){2}(\s*-?\d+%?\s*,?\s*\)?)(,\s*(0?\.\d+)?|1)?\)/,
-    'gim',
-  );
-  if (typeof color === 'string' && reg.test(color)) {
-    return true;
-  }
-
-  return false;
+export const isValidColor = (color: string) => {
+  return chroma.valid(color);
 };
 
 export const getHexColor = (color: string) => {
@@ -22,7 +14,7 @@ export const getHexColor = (color: string) => {
 export const checkParam = (palette: Palette): boolean => {
   const { color, name, shade, shades } = palette;
 
-  if (!color || typeof color !== 'string' || !isColor(color)) {
+  if (!color || typeof color !== 'string' || !isValidColor(color)) {
     throw new PaletteError(`Invalid color: '${color}'. Please provide a valid color.`);
   }
 
@@ -72,13 +64,13 @@ export const getPalettesFromOptions = (options: Record<string, string>): Palette
   return palettes;
 };
 
-export const convertResultToCSS = (result: PaletteResult): Record<string, string> => {
+export const convertResultToCSS = (result: PaletteResult, prefix: string): Record<string, string> => {
   const colors: Record<string, string> = {};
   for (const [key, color] of Object.entries(result)) {
-    colors[`--color-${key}`] = color.DEFAULT;
+    colors[`--${prefix}${key}`] = color.DEFAULT;
     for (const [shade, colorValue] of Object.entries(color)) {
       if (shade === 'DEFAULT') continue;
-      colors[`--color-${key}-${shade}`] = colorValue;
+      colors[`--${prefix}${key}-${shade}`] = colorValue;
     }
   }
   return colors;

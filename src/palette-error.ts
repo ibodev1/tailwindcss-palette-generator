@@ -1,6 +1,6 @@
 class PaletteError extends Error {
   constructor(message: string) {
-    const errorMessage = `[PlaletteError] ${message}`;
+    const errorMessage = `[PaletteError] ${message}`;
     super(errorMessage);
     this.name = 'PaletteError';
   }

@@ -1,10 +1,15 @@
 import { initialOptions } from './consts.js';
 import generateColorPalette from './generateColorPalette.js';
+import PaletteError from './palette-error.js';
 import type { ColorResultOptions, Palette, PaletteResult } from './types.js';
-import { checkParam, getHexColor, isColor } from './utils.js';
+import { checkParam, getHexColor, isValidColor } from './utils.js';
 
 export const getPalette = (params: Palette[] | Palette | string): PaletteResult => {
   const palette: PaletteResult = {};
+
+  if (!params) {
+    throw new PaletteError('Please provide a valid palette configuration.');
+  }
 
   const getColorOptions = (colorPalette: Palette): ColorResultOptions => {
     const { color, shade, shades } = colorPalette;
@@ -32,7 +37,11 @@ export const getPalette = (params: Palette[] | Palette | string): PaletteResult 
       const options = getColorOptions(params);
       addPalette(params.name, options);
     }
-  } else if (typeof params === 'string' && isColor(params)) {
+  } else if (typeof params === 'string') {
+    if (!isValidColor(params)) {
+      throw new PaletteError(`Invalid color: '${params}'. Please provide a valid color.`);
+    }
+
     const options: ColorResultOptions = {
       mainShade: initialOptions.mainShade,
       primaryColor: getHexColor(params),
