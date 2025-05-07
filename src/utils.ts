@@ -1,6 +1,7 @@
 import chroma from 'chroma-js';
-import { initialOptions } from './consts';
-import type { Palette, PaletteResult } from './types';
+import { initialOptions } from './consts.js';
+import PaletteError from './palette-error.js';
+import type { Palette, PaletteResult } from './types.js';
 
 export const isColor = (color: string) => {
   const reg = new RegExp(
@@ -22,32 +23,32 @@ export const checkParam = (palette: Palette): boolean => {
   const { color, name, shade, shades } = palette;
 
   if (!color || typeof color !== 'string' || !isColor(color)) {
-    throw new Error(`Invalid color: '${color}'. Please provide a valid color.`);
+    throw new PaletteError(`Invalid color: '${color}'. Please provide a valid color.`);
   }
 
   if (!name || typeof name !== 'string') {
-    throw new Error(`Invalid name: '${name}'. Please provide a valid name.`);
+    throw new PaletteError(`Invalid name: '${name}'. Please provide a valid name.`);
   }
 
   if (shade && typeof shade !== 'number') {
-    throw new Error(`Invalid shade value: '${shade}'. Shade must be a number.`);
+    throw new PaletteError(`Invalid shade value: '${shade}'. Shade must be a number.`);
   }
 
   if (shades) {
     if (!Array.isArray(shades)) {
-      throw new Error(`Invalid shades: '${shades}'. Shades must be an array.`);
+      throw new PaletteError(`Invalid shades: '${shades}'. Shades must be an array.`);
     }
 
     if (shades.length < 3) {
-      throw new Error('Shades array must contain at least 3 elements.');
+      throw new PaletteError('Shades array must contain at least 3 elements.');
     }
 
     if (shade && !shades.includes(shade)) {
-      throw new Error(`Main shade '${shade}' is not included in the shades array.`);
+      throw new PaletteError(`Main shade '${shade}' is not included in the shades array.`);
     }
   } else {
     if (shade && !initialOptions.shades.includes(shade)) {
-      throw new Error(`Main shade '${shade}' must be one of: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900.`);
+      throw new PaletteError(`Main shade '${shade}' must be one of: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900.`);
     }
   }
 

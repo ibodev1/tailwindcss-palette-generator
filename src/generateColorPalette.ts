@@ -1,6 +1,6 @@
 import chroma from 'chroma-js';
-import type { ColorResultOptions, PaletteProp } from './types';
-import { getHexColor } from './utils';
+import type { ColorResultOptions, PaletteProp } from './types.js';
+import { getHexColor } from './utils.js';
 
 const calculateDarkenValue = (shade: number, mainShade: number): number => {
   return (shade - mainShade) / 100 / 2;

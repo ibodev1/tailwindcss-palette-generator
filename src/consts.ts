@@ -1,4 +1,4 @@
-import type { ColorResultOptions } from './types';
+import type { ColorResultOptions } from './types.js';
 
 export const initialOptions: Omit<ColorResultOptions, 'primaryColor'> = {
   mainShade: 500,

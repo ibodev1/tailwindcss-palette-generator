@@ -1,7 +1,7 @@
-import { initialOptions } from './consts';
-import generateColorPalette from './generateColorPalette';
-import type { ColorResultOptions, Palette, PaletteResult } from './types';
-import { checkParam, getHexColor, isColor } from './utils';
+import { initialOptions } from './consts.js';
+import generateColorPalette from './generateColorPalette.js';
+import type { ColorResultOptions, Palette, PaletteResult } from './types.js';
+import { checkParam, getHexColor, isColor } from './utils.js';
 
 export const getPalette = (params: Palette[] | Palette | string): PaletteResult => {
   const palette: PaletteResult = {};
@@ -43,3 +43,5 @@ export const getPalette = (params: Palette[] | Palette | string): PaletteResult 
 
   return palette;
 };
+
+export default getPalette;

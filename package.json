@@ -2,22 +2,44 @@
   "name": "tailwindcss-palette-generator",
   "version": "1.2.3",
   "license": "MIT",
+  "type": "module",
   "directories": {
     "lib": "dist/index.js",
     "test": "test/lib.test.ts"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./getPalette": {
+      "types": "./dist/getPalette.d.ts",
+      "import": "./dist/getPalette.js"
+    }
+  },
   "publishConfig": {
-    "types": "dist/index.d.ts",
-    "access": "public"
+    "access": "public",
+    "provenance": true,
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "./getPalette": {
+        "types": "./dist/getPalette.d.ts",
+        "import": "./dist/getPalette.js"
+      }
+    }
   },
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
-    "build": "npm run clean && tsup src/index.ts",
+    "build": "npm run clean && tsup",
     "dev": "tsup --watch",
     "test": "jest",
     "prepublish": "npm run build && npm run test",

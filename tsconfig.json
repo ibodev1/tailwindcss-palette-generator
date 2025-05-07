@@ -15,7 +15,8 @@
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "verbatimModuleSyntax": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]
