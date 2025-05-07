@@ -4,8 +4,8 @@
   "license": "MIT",
   "type": "module",
   "directories": {
-    "lib": "dist/index.js",
-    "test": "test/lib.test.ts"
+    "lib": "./dist/index.js",
+    "test": "./test/lib.test.ts"
   },
   "exports": {
     ".": {
@@ -19,7 +19,6 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true,
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
