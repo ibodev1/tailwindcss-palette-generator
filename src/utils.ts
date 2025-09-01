@@ -40,7 +40,7 @@ export const checkParam = (palette: Palette): boolean => {
     }
   } else {
     if (shade && !initialOptions.shades.includes(shade)) {
-      throw new PaletteError(`Main shade '${shade}' must be one of: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900.`);
+      throw new PaletteError(`Main shade '${shade}' must be one of: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950.`);
     }
   }
 
