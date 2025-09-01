@@ -20,6 +20,7 @@ describe('Palette Generation Tests', () => {
         '700': '#c78d00',
         '800': '#ab7600',
         '900': '#916000',
+        '950': '#845500',
         DEFAULT: '#ffbd00',
       },
     });
@@ -72,6 +73,7 @@ describe('Palette Generation Tests', () => {
         '700': '#ab7600',
         '800': '#916000',
         '900': '#784b00',
+        '950': '#6c4000',
         DEFAULT: '#ffbd00',
       },
       secondary: {

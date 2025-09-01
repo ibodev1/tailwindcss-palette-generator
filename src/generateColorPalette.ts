@@ -26,6 +26,7 @@ const generateColorPalette = (options: ColorResultOptions): Record<PaletteProp, 
     palette.DEFAULT = getHexColor(options.primaryColor);
     return Object.freeze(palette);
   } catch (error) {
+    console.error('Error generating color palette:', error);
     return Object.create(null);
   }
 };
