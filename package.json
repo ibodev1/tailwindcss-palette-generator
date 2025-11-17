@@ -38,8 +38,8 @@
     "src"
   ],
   "scripts": {
-    "build": "npm run clean && tsup",
-    "dev": "tsup --watch",
+    "build": "npm run clean && rslib build",
+    "build:watch": "rslib build --watch",
     "test": "vitest",
     "prepublish": "npm run build && npm run test",
     "postversion": "npm publish --access public",
@@ -75,18 +75,17 @@
     "tailwindcss": ">=3.4.0 || >=4.0.0 || insiders"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.2",
-    "@swc/core": "^1.13.5",
-    "@tailwindcss/postcss": "^4.1.12",
-    "@types/chroma-js": "^3.1.1",
-    "@types/node": "^24.3.0",
+    "@biomejs/biome": "^2.3.5",
+    "@rslib/core": "^0.17.2",
+    "@swc/core": "^1.15.2",
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/chroma-js": "^3.1.2",
+    "@types/node": "^24.10.1",
     "postcss": "^8.5.6",
-    "rimraf": "^6.0.1",
-    "tailwindcss": "^4.1.12",
-    "tailwindcss-palette-generator": ".",
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "rimraf": "^6.1.0",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.9"
   },
-  "packageManager": "npm@11.5.2"
+  "packageManager": "npm@11.6.2"
 }

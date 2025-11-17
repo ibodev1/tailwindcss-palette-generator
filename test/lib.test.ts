@@ -192,8 +192,6 @@ describe('TailwindCSS Plugin Additional Tests', () => {
 
     const { css: output } = await runPostCSS(css);
 
-    console.log(output);
-
     expect(output).toContain('--mypre-primary');
     expect(output).toContain('--mypre-secondary');
   });
