@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "isolatedModules": true,
+    "emitDeclarationOnly": true,
     "outDir": "dist",
     "strict": true,
     "declaration": true,
@@ -12,11 +13,12 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "lib": ["ESNext"],
+    "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]

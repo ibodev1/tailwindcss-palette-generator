@@ -1,14 +1,10 @@
-import chroma from 'chroma-js';
-import { initialOptions } from './consts.js';
-import PaletteError from './palette-error.js';
-import type { Palette, PaletteResult } from './types.js';
+import type { ColorResultOptions, Palette, PaletteResult } from '../types/index.ts';
+import { isValidColor } from './color.ts';
+import PaletteError from './error.ts';
 
-export const isValidColor = (color: string) => {
-  return chroma.valid(color);
-};
-
-export const getHexColor = (color: string) => {
-  return chroma(color).hex().toLowerCase();
+export const initialOptions: Omit<ColorResultOptions, 'primaryColor'> = {
+  mainShade: 500,
+  shades: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950],
 };
 
 export const checkParam = (palette: Palette): boolean => {

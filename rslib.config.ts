@@ -3,7 +3,8 @@ import { defineConfig } from '@rslib/core';
 export default defineConfig({
   source: {
     entry: {
-      index: 'src/**/*.ts',
+      index: 'src/index.ts',
+      getPalette: 'src/getPalette.ts',
     },
     tsconfigPath: './tsconfig.json',
   },
@@ -11,7 +12,7 @@ export default defineConfig({
     {
       format: 'esm',
       dts: true,
-      bundle: false,
+      bundle: true,
       output: {
         minify: false,
         sourceMap: true,

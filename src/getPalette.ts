@@ -1,8 +1,36 @@
-import { initialOptions } from './consts.js';
-import generateColorPalette from './generateColorPalette.js';
-import PaletteError from './palette-error.js';
-import type { ColorResultOptions, Palette, PaletteResult } from './types.js';
-import { checkParam, getHexColor, isValidColor } from './utils.js';
+import type { ColorResultOptions, Palette, PaletteProp, PaletteResult } from './types/index.ts';
+import { darkenColor, getHexColor, isValidColor } from './utils/color.ts';
+import PaletteError from './utils/error.ts';
+import { checkParam, initialOptions } from './utils/index.ts';
+
+const calculateDarkenValue = (shade: number, mainShade: number): number => {
+  return (shade - mainShade) / 100 / 2;
+};
+
+const shadeColor = (primaryColor: string, mainShade: number, shade: number): string => {
+  return darkenColor(primaryColor, calculateDarkenValue(shade, mainShade));
+};
+
+const colorResult = (
+  fn: (primaryColor: string, mainShade: number, shade: number) => string,
+  options: ColorResultOptions,
+): Record<PaletteProp, string> => {
+  return options.shades.reduce((acc: Record<string, string>, shade: number) => {
+    acc[String(shade)] = fn(options.primaryColor, options.mainShade, shade);
+    return acc;
+  }, {});
+};
+
+const generateColorPalette = (options: ColorResultOptions): Record<PaletteProp, string> => {
+  try {
+    const palette = colorResult(shadeColor, options);
+    palette.DEFAULT = getHexColor(options.primaryColor);
+    return Object.freeze(palette);
+  } catch (error) {
+    console.error('Error generating color palette:', error);
+    return Object.create(null);
+  }
+};
 
 export const getPalette = (params: Palette[] | Palette | string): PaletteResult => {
   const palette: PaletteResult = {};

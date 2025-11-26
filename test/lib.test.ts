@@ -1,7 +1,7 @@
 import path from 'node:path';
+import { describe, expect, test } from '@rstest/core';
 import tailwindcssPostCSS from '@tailwindcss/postcss';
 import postcss from 'postcss';
-import { describe, expect, test } from 'vitest';
 import { getPalette } from '../dist/getPalette';
 
 describe('Palette Generation Tests', () => {

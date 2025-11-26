@@ -1,7 +1,7 @@
 import createPlugin from 'tailwindcss/plugin';
-import { getPalette } from './getPalette.js';
-import PaletteError from './palette-error.js';
-import { convertResultToCSS, getPalettesFromOptions } from './utils.js';
+import { getPalette } from './getPalette.ts';
+import PaletteError from './utils/error.ts';
+import { convertResultToCSS, getPalettesFromOptions } from './utils/index.ts';
 
 type PluginWithOptions = ReturnType<typeof createPlugin.withOptions<Record<string, string>>>;
 
