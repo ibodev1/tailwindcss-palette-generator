@@ -110,7 +110,3 @@ export default {
   }
 }
 ```
-
-## 🚀 Dependencies
-
-- [chroma.js](https://gka.github.io/chroma.js/) - Library used for color manipulation
