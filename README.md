@@ -52,6 +52,22 @@ With this definition, you can now use your color palettes with shade levels from
 <div class="text-secondary-700">Secondary color (dark shade)</div>
 ```
 
+### Light and Dark Variants
+
+Use `dark-<name>` to define the dark mode variant for an existing palette name.
+
+```css
+@import "tailwindcss";
+
+@plugin "tailwindcss-palette-generator" {
+  background: #F8FAFC;
+  dark-background: #0F172A;
+}
+```
+
+This generates `:root` variables from `background` and overrides same variables in `.dark` from `dark-background`.
+
+
 ## 💡 Advanced Usage
 
 ### Programmatic Usage with JavaScript/TypeScript

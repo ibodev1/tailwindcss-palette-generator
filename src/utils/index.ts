@@ -43,21 +43,42 @@ export const checkParam = (palette: Palette): boolean => {
   return true;
 };
 
-export const getPalettesFromOptions = (options: Record<string, string>): Palette[] => {
-  const palettes: Palette[] = [];
+const darkPalettePrefix = 'dark-';
 
+export const getPalettesFromOptions = (options: Record<string, string>): { lightPalettes: Palette[]; darkPalettes: Palette[] } => {
+  const lightPalettes: Palette[] = [];
+  const darkPalettes: Palette[] = [];
+  const lightPaletteNames = new Set<string>();
   for (const [key, value] of Object.entries(options)) {
+    const isDarkPalette = key.startsWith(darkPalettePrefix);
+    const name = isDarkPalette ? key.slice(darkPalettePrefix.length) : key;
+
+    if (!name) {
+      throw new PaletteError(`Invalid option key: '${key}'.`);
+    }
     const palette: Palette = {
-      name: key,
+      name,
       color: value,
       shade: initialOptions.mainShade,
       shades: initialOptions.shades,
     };
 
-    palettes.push(palette);
+    if (isDarkPalette) {
+      darkPalettes.push(palette);
+      continue;
+    }
+
+    lightPalettes.push(palette);
+    lightPaletteNames.add(name);
   }
 
-  return palettes;
+  for (const darkPalette of darkPalettes) {
+    if (!lightPaletteNames.has(darkPalette.name)) {
+      throw new PaletteError(`Missing base color for dark variant '${darkPalettePrefix}${darkPalette.name}'. Add '${darkPalette.name}' option.`);
+    }
+  }
+
+  return { lightPalettes, darkPalettes };
 };
 
 export const convertResultToCSS = (result: PaletteResult, prefix: string): Record<string, string> => {
@@ -69,5 +90,24 @@ export const convertResultToCSS = (result: PaletteResult, prefix: string): Recor
       colors[`--${prefix}${key}-${shade}`] = colorValue;
     }
   }
+  return colors;
+};
+
+export const convertResultToThemeColors = (result: PaletteResult, prefix: string): Record<string, Record<string, string>> => {
+  const colors: Record<string, Record<string, string>> = {};
+
+  for (const [key, color] of Object.entries(result)) {
+    const themeColor: Record<string, string> = {
+      DEFAULT: `var(--${prefix}${key})`,
+    };
+
+    for (const shade of Object.keys(color)) {
+      if (shade === 'DEFAULT') continue;
+      themeColor[shade] = `var(--${prefix}${key}-${shade})`;
+    }
+
+    colors[key] = themeColor;
+  }
+
   return colors;
 };

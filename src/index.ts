@@ -1,9 +1,11 @@
 import createPlugin from 'tailwindcss/plugin';
 import { getPalette } from './getPalette.ts';
 import PaletteError from './utils/error.ts';
-import { convertResultToCSS, getPalettesFromOptions } from './utils/index.ts';
+import { convertResultToCSS, convertResultToThemeColors, getPalettesFromOptions } from './utils/index.ts';
 
 type PluginWithOptions = ReturnType<typeof createPlugin.withOptions<Record<string, string>>>;
+
+const defaultColorPrefix = 'color-';
 
 const pluginFn: PluginWithOptions = createPlugin.withOptions<Record<string, string>>(
   (options = {}) => {
@@ -12,17 +14,33 @@ const pluginFn: PluginWithOptions = createPlugin.withOptions<Record<string, stri
         throw new PaletteError('Please provide options to the plugin.');
       }
 
-      let colorPrefix = theme('--prefix', 'color-');
+      let colorPrefix = theme('--prefix', defaultColorPrefix);
       colorPrefix = colorPrefix.replace(/['"]/g, '');
 
-      const palettes = getPalettesFromOptions(options);
+      const { lightPalettes, darkPalettes } = getPalettesFromOptions(options);
 
-      if (palettes.length > 0) {
-        const result = getPalette(palettes);
-        const css = convertResultToCSS(result, colorPrefix);
-        addBase({
-          ':root': css,
-        });
+      if (lightPalettes.length > 0) {
+        const result = getPalette(lightPalettes);
+        const darkResult = darkPalettes.length > 0 ? getPalette(darkPalettes) : null;
+        const prefixList = colorPrefix === defaultColorPrefix ? [defaultColorPrefix] : [defaultColorPrefix, colorPrefix];
+        const rootCss: Record<string, string> = {};
+        const darkCss: Record<string, string> = {};
+
+        for (const prefix of prefixList) {
+          Object.assign(rootCss, convertResultToCSS(result, prefix));
+
+          if (darkResult) {
+            Object.assign(darkCss, convertResultToCSS(darkResult, prefix));
+          }
+        }
+        const baseStyles: Record<string, Record<string, string>> = {
+          ':root': rootCss,
+        };
+
+        if (darkResult) {
+          baseStyles['.dark'] = darkCss;
+        }
+        addBase(baseStyles);
       }
     };
   },
@@ -31,15 +49,15 @@ const pluginFn: PluginWithOptions = createPlugin.withOptions<Record<string, stri
       throw new PaletteError('Please provide options to the plugin.');
     }
 
-    const palettes = getPalettesFromOptions(options);
+    const { lightPalettes } = getPalettesFromOptions(options);
 
-    if (palettes.length > 0) {
-      const result = getPalette(palettes);
+    if (lightPalettes.length > 0) {
+      const result = getPalette(lightPalettes);
 
       return {
         theme: {
           extend: {
-            colors: result,
+            colors: convertResultToThemeColors(result, defaultColorPrefix),
           },
         },
       };

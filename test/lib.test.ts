@@ -171,9 +171,9 @@ describe('TailwindCSS Plugin Additional Tests', () => {
 
     const { css: output } = await runPostCSS(css);
 
-    expect(output).toContain('border-color: #ffbd00;');
-    expect(output).toContain('background-color: #ff6f00;');
-    expect(output).toContain('color: #ffd371;');
+    expect(output).toContain('border-color: var(--color-primary);');
+    expect(output).toContain('background-color: var(--color-secondary);');
+    expect(output).toContain('color: var(--color-secondary-100);');
   });
 
   test('Test custom prefix', async () => {
@@ -194,5 +194,39 @@ describe('TailwindCSS Plugin Additional Tests', () => {
 
     expect(output).toContain('--mypre-primary');
     expect(output).toContain('--mypre-secondary');
+  });
+
+  test('Dark variant overrides css variables in .dark scope', async () => {
+    const css = `
+@import "tailwindcss";
+
+@plugin "tailwindcss-palette-generator" {
+  background: #F8FAFC;
+  dark-background: #0F172A;
+}
+
+.test {
+  @apply bg-background-500;
+}
+    `.trim();
+
+    const { css: output } = await runPostCSS(css);
+
+    expect(output).toContain('--color-background: #f8fafc;');
+    expect(output).toContain('.dark {');
+    expect(output).toContain('--color-background: #0f172a;');
+    expect(output).toContain('background-color: var(--color-background-500);');
+  });
+
+  test('Dark variant without base color throws', async () => {
+    const css = `
+@import "tailwindcss";
+
+@plugin "tailwindcss-palette-generator" {
+  dark-background: #0F172A;
+}
+    `.trim();
+
+    await expect(runPostCSS(css)).rejects.toThrow("Missing base color for dark variant 'dark-background'. Add 'background' option.");
   });
 });
