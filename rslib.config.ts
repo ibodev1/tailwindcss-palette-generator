@@ -18,6 +18,22 @@ export default defineConfig({
         sourceMap: true,
         target: 'node',
         cleanDistPath: true,
+        distPath: {
+          root: 'dist/esm',
+        },
+      },
+    },
+    {
+      format: 'cjs',
+      dts: true,
+      bundle: true,
+      output: {
+        minify: false,
+        sourceMap: true,
+        target: 'node',
+        distPath: {
+          root: 'dist/cjs',
+        },
       },
     },
   ],

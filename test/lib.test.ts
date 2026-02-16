@@ -2,7 +2,7 @@ import path from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import tailwindcssPostCSS from '@tailwindcss/postcss';
 import postcss from 'postcss';
-import { getPalette } from '../dist/getPalette';
+import { getPalette } from '../dist/esm/getPalette';
 
 describe('Palette Generation Tests', () => {
   test('String color generates correct palette', () => {

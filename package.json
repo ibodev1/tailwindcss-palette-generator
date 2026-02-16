@@ -3,39 +3,32 @@
   "version": "2.0.0",
   "license": "MIT",
   "type": "module",
-  "directories": {
-    "lib": "./dist/index.js",
-    "test": "./test/lib.test.ts"
-  },
+  "description": "Color palette generation library for TailwindCSS.",
+  "author": "@ibodev1 <github.com/ibodev1>",
+  "sideEffects": false,
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
     },
     "./getPalette": {
-      "types": "./dist/getPalette.d.ts",
-      "import": "./dist/getPalette.js"
+      "types": "./dist/esm/getPalette.d.ts",
+      "import": "./dist/esm/getPalette.js",
+      "require": "./dist/cjs/getPalette.cjs"
     }
   },
   "publishConfig": {
-    "access": "public",
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js"
-      },
-      "./getPalette": {
-        "types": "./dist/getPalette.d.ts",
-        "import": "./dist/getPalette.js"
-      }
-    }
+    "access": "public"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "src"
+    "src",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
     "build": "pnpm run clean && rslib build",
@@ -64,10 +57,11 @@
     "tailwind",
     "tailwind palette generator",
     "tailwindcss",
-    "tailwindcss palette generator"
+    "tailwindcss palette generator",
+    "color palette",
+    "css variables",
+    "dark mode"
   ],
-  "author": "@ibodev1 <github.com/ibodev1>",
-  "description": "Color palette generation library for TailwindCSS.",
   "peerDependencies": {
     "tailwindcss": ">=3.4.0 || >=4.0.0 || >=0.0.0-insiders"
   },
