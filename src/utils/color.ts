@@ -1,329 +1,156 @@
 import PaletteError from './error.ts';
+import NAMED_COLORS from './named-colors.ts';
 
-// Color space conversion utilities
-const rgbToLab = (r: number, g: number, b: number): [number, number, number] => {
-  // Normalize RGB values
-  r = r / 255;
-  g = g / 255;
-  b = b / 255;
+// ─── Types ───────────────────────────────────────────────────────────────────
+type RGB = [r: number, g: number, b: number];
+type LAB = [L: number, a: number, b: number];
 
-  // Apply gamma correction
-  r = r > 0.04045 ? ((r + 0.055) / 1.055) ** 2.4 : r / 12.92;
-  g = g > 0.04045 ? ((g + 0.055) / 1.055) ** 2.4 : g / 12.92;
-  b = b > 0.04045 ? ((b + 0.055) / 1.055) ** 2.4 : b / 12.92;
+// ─── CIE-LAB Constants ──────────────────────────────────────────────────────
+/** CIE standard threshold for linear/nonlinear transition */
+const CIE_EPSILON = 0.008856;
+const CIE_KAPPA = 7.787;
+const CIE_OFFSET = 16 / 116;
 
-  // Convert to XYZ
-  let x = (r * 0.4124564 + g * 0.3575761 + b * 0.1804375) * 100;
-  let y = (r * 0.2126729 + g * 0.7151522 + b * 0.072175) * 100;
-  let z = (r * 0.0193339 + g * 0.119192 + b * 0.9503041) * 100;
+/** D65 standard illuminant reference values */
+const D65_X = 95.047;
+const D65_Y = 100.0;
+const D65_Z = 108.883;
 
-  // Normalize for D65 illuminant
-  x = x / 95.047;
-  y = y / 100.0;
-  z = z / 108.883;
+/** Chroma.js-compatible darkening constant */
+const LAB_DARKEN_FACTOR = 18;
 
-  // Convert to LAB
-  x = x > 0.008856 ? x ** (1 / 3) : 7.787 * x + 16 / 116;
-  y = y > 0.008856 ? y ** (1 / 3) : 7.787 * y + 16 / 116;
-  z = z > 0.008856 ? z ** (1 / 3) : 7.787 * z + 16 / 116;
+// ─── sRGB Gamma ──────────────────────────────────────────────────────────────
+const linearize = (c: number): number => (c > 0.04045 ? ((c + 0.055) / 1.055) ** 2.4 : c / 12.92);
 
-  const L = 116 * y - 16;
-  const a = 500 * (x - y);
-  const b_lab = 200 * (y - z);
+const delinearize = (c: number): number => (c > 0.0031308 ? 1.055 * c ** (1 / 2.4) - 0.055 : 12.92 * c);
 
-  return [L, a, b_lab];
+// ─── Clamping ────────────────────────────────────────────────────────────────
+const clampByte = (value: number): number => Math.max(0, Math.min(255, Math.round(value)));
+
+// ─── Color Space Conversions ─────────────────────────────────────────────────
+
+const rgbToLab = (rgb: RGB): LAB => {
+  const [rr, gg, bb] = rgb.map((c) => linearize(c / 255));
+
+  let x = ((rr * 0.4124564 + gg * 0.3575761 + bb * 0.1804375) * 100) / D65_X;
+  let y = ((rr * 0.2126729 + gg * 0.7151522 + bb * 0.072175) * 100) / D65_Y;
+  let z = ((rr * 0.0193339 + gg * 0.119192 + bb * 0.9503041) * 100) / D65_Z;
+
+  x = x > CIE_EPSILON ? x ** (1 / 3) : CIE_KAPPA * x + CIE_OFFSET;
+  y = y > CIE_EPSILON ? y ** (1 / 3) : CIE_KAPPA * y + CIE_OFFSET;
+  z = z > CIE_EPSILON ? z ** (1 / 3) : CIE_KAPPA * z + CIE_OFFSET;
+
+  return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
 };
 
-const labToRgb = (L: number, a: number, b: number): [number, number, number] => {
-  // Convert LAB to XYZ
+const labToRgb = ([L, a, b]: LAB): RGB => {
   let y = (L + 16) / 116;
   let x = a / 500 + y;
   let z = y - b / 200;
 
-  const y3 = y ** 3;
   const x3 = x ** 3;
+  const y3 = y ** 3;
   const z3 = z ** 3;
 
-  y = y3 > 0.008856 ? y3 : (y - 16 / 116) / 7.787;
-  x = x3 > 0.008856 ? x3 : (x - 16 / 116) / 7.787;
-  z = z3 > 0.008856 ? z3 : (z - 16 / 116) / 7.787;
+  x = ((x3 > CIE_EPSILON ? x3 : (x - CIE_OFFSET) / CIE_KAPPA) * D65_X) / 100;
+  y = ((y3 > CIE_EPSILON ? y3 : (y - CIE_OFFSET) / CIE_KAPPA) * D65_Y) / 100;
+  z = ((z3 > CIE_EPSILON ? z3 : (z - CIE_OFFSET) / CIE_KAPPA) * D65_Z) / 100;
 
-  // Denormalize for D65
-  x = x * 95.047;
-  y = y * 100.0;
-  z = z * 108.883;
+  const rr = x * 3.2404542 + y * -1.5371385 + z * -0.4985314;
+  const gg = x * -0.969266 + y * 1.8760108 + z * 0.041556;
+  const bb = x * 0.0556434 + y * -0.2040259 + z * 1.0572252;
 
-  // Convert XYZ to RGB
-  x = x / 100;
-  y = y / 100;
-  z = z / 100;
-
-  let r = x * 3.2404542 + y * -1.5371385 + z * -0.4985314;
-  let g = x * -0.969266 + y * 1.8760108 + z * 0.041556;
-  let b_rgb = x * 0.0556434 + y * -0.2040259 + z * 1.0572252;
-
-  // Apply gamma correction
-  r = r > 0.0031308 ? 1.055 * r ** (1 / 2.4) - 0.055 : 12.92 * r;
-  g = g > 0.0031308 ? 1.055 * g ** (1 / 2.4) - 0.055 : 12.92 * g;
-  b_rgb = b_rgb > 0.0031308 ? 1.055 * b_rgb ** (1 / 2.4) - 0.055 : 12.92 * b_rgb;
-
-  // Clamp and convert to 0-255
-  r = Math.max(0, Math.min(255, Math.round(r * 255)));
-  g = Math.max(0, Math.min(255, Math.round(g * 255)));
-  b_rgb = Math.max(0, Math.min(255, Math.round(b_rgb * 255)));
-
-  return [r, g, b_rgb];
+  return [clampByte(delinearize(rr) * 255), clampByte(delinearize(gg) * 255), clampByte(delinearize(bb) * 255)];
 };
 
-const parseHexColor = (hex: string): [number, number, number] => {
-  hex = hex.replace(/^#/, '');
-
-  if (hex.length === 3) {
-    hex = hex
-      .split('')
-      .map((char) => char + char)
-      .join('');
-  }
-
-  const num = parseInt(hex, 16);
-  if (Number.isNaN(num)) {
-    throw new PaletteError('Invalid hex color');
-  }
-  return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
-};
-
-const rgbToHex = (r: number, g: number, b: number): string => {
-  return (
-    '#' +
-    [r, g, b]
-      .map((x) => Math.max(0, Math.min(255, Math.round(x))))
-      .map((x) => x.toString(16).padStart(2, '0'))
-      .join('')
-  );
-};
-
-export const darkenColor = (color: string, amount: number): string => {
-  // Parse the input color
-  const [r, g, b] = parseHexColor(color);
-
-  // Convert to LAB
-  const [L, a, b_lab] = rgbToLab(r, g, b);
-
-  // Darken by reducing L value (chroma.js uses Kn = 18)
-  const darkenedL = L - amount * 18;
-
-  // Convert back to RGB
-  const [newR, newG, newB] = labToRgb(darkenedL, a, b_lab);
-
-  // Convert to hex
-  return rgbToHex(newR, newG, newB);
-};
-
-const NAMED_COLORS: Record<string, string> = {
-  aliceblue: '#f0f8ff',
-  antiquewhite: '#faebd7',
-  aqua: '#00ffff',
-  aquamarine: '#7fffd4',
-  azure: '#f0ffff',
-  beige: '#f5f5dc',
-  bisque: '#ffe4c4',
-  black: '#000000',
-  blanchedalmond: '#ffebcd',
-  blue: '#0000ff',
-  blueviolet: '#8a2be2',
-  brown: '#a52a2a',
-  burlywood: '#deb887',
-  cadetblue: '#5f9ea0',
-  chartreuse: '#7fff00',
-  chocolate: '#d2691e',
-  coral: '#ff7f50',
-  cornflowerblue: '#6495ed',
-  cornsilk: '#fff8dc',
-  crimson: '#dc143c',
-  cyan: '#00ffff',
-  darkblue: '#00008b',
-  darkcyan: '#008b8b',
-  darkgoldenrod: '#b8860b',
-  darkgray: '#a9a9a9',
-  darkgreen: '#006400',
-  darkgrey: '#a9a9a9',
-  darkkhaki: '#bdb76b',
-  darkmagenta: '#8b008b',
-  darkolivegreen: '#556b2f',
-  darkorange: '#ff8c00',
-  darkorchid: '#9932cc',
-  darkred: '#8b0000',
-  darksalmon: '#e9967a',
-  darkseagreen: '#8fbc8f',
-  darkslateblue: '#483d8b',
-  darkslategray: '#2f4f4f',
-  darkslategrey: '#2f4f4f',
-  darkturquoise: '#00ced1',
-  darkviolet: '#9400d3',
-  deeppink: '#ff1493',
-  deepskyblue: '#00bfff',
-  dimgray: '#696969',
-  dimgrey: '#696969',
-  dodgerblue: '#1e90ff',
-  firebrick: '#b22222',
-  floralwhite: '#fffaf0',
-  forestgreen: '#228b22',
-  fuchsia: '#ff00ff',
-  gainsboro: '#dcdcdc',
-  ghostwhite: '#f8f8ff',
-  gold: '#ffd700',
-  goldenrod: '#daa520',
-  gray: '#808080',
-  green: '#008000',
-  greenyellow: '#adff2f',
-  grey: '#808080',
-  honeydew: '#f0fff0',
-  hotpink: '#ff69b4',
-  indianred: '#cd5c5c',
-  indigo: '#4b0082',
-  ivory: '#fffff0',
-  khaki: '#f0e68c',
-  lavender: '#e6e6fa',
-  lavenderblush: '#fff0f5',
-  lawngreen: '#7cfc00',
-  lemonchiffon: '#fffacd',
-  lightblue: '#add8e6',
-  lightcoral: '#f08080',
-  lightcyan: '#e0ffff',
-  lightgoldenrodyellow: '#fafad2',
-  lightgray: '#d3d3d3',
-  lightgreen: '#90ee90',
-  lightgrey: '#d3d3d3',
-  lightpink: '#ffb6c1',
-  lightsalmon: '#ffa07a',
-  lightseagreen: '#20b2aa',
-  lightskyblue: '#87cefa',
-  lightslategray: '#778899',
-  lightslategrey: '#778899',
-  lightsteelblue: '#b0c4de',
-  lightyellow: '#ffffe0',
-  lime: '#00ff00',
-  limegreen: '#32cd32',
-  linen: '#faf0e6',
-  magenta: '#ff00ff',
-  maroon: '#800000',
-  mediumaquamarine: '#66cdaa',
-  mediumblue: '#0000cd',
-  mediumorchid: '#ba55d3',
-  mediumpurple: '#9370db',
-  mediumseagreen: '#3cb371',
-  mediumslateblue: '#7b68ee',
-  mediumspringgreen: '#00fa9a',
-  mediumturquoise: '#48d1cc',
-  mediumvioletred: '#c71585',
-  midnightblue: '#191970',
-  mintcream: '#f5fffa',
-  mistyrose: '#ffe4e1',
-  moccasin: '#ffe4b5',
-  navajowhite: '#ffdead',
-  navy: '#000080',
-  oldlace: '#fdf5e6',
-  olive: '#808000',
-  olivedrab: '#6b8e23',
-  orange: '#ffa500',
-  orangered: '#ff4500',
-  orchid: '#da70d6',
-  palegoldenrod: '#eee8aa',
-  palegreen: '#98fb98',
-  paleturquoise: '#afeeee',
-  palevioletred: '#db7093',
-  papayawhip: '#ffefd5',
-  peachpuff: '#ffdab9',
-  peru: '#cd853f',
-  pink: '#ffc0cb',
-  plum: '#dda0dd',
-  powderblue: '#b0e0e6',
-  purple: '#800080',
-  rebeccapurple: '#663399',
-  red: '#ff0000',
-  rosybrown: '#bc8f8f',
-  royalblue: '#4169e1',
-  saddlebrown: '#8b4513',
-  salmon: '#fa8072',
-  sandybrown: '#f4a460',
-  seagreen: '#2e8b57',
-  seashell: '#fff5ee',
-  sienna: '#a0522d',
-  silver: '#c0c0c0',
-  skyblue: '#87ceeb',
-  slateblue: '#6a5acd',
-  slategray: '#708090',
-  slategrey: '#708090',
-  snow: '#fffafa',
-  springgreen: '#00ff7f',
-  steelblue: '#4682b4',
-  tan: '#d2b48c',
-  teal: '#008080',
-  thistle: '#d8bfd8',
-  tomato: '#ff6347',
-  turquoise: '#40e0d0',
-  violet: '#ee82ee',
-  wheat: '#f5deb3',
-  white: '#ffffff',
-  whitesmoke: '#f5f5f5',
-  yellow: '#ffff00',
-  yellowgreen: '#9acd32',
-};
-
-const hslToRgb = (h: number, s: number, l: number): [number, number, number] => {
-  s /= 100;
-  l /= 100;
+const hslToRgb = (h: number, s: number, l: number): RGB => {
+  const sat = s / 100;
+  const lit = l / 100;
+  const a = sat * Math.min(lit, 1 - lit);
   const k = (n: number) => (n + h / 30) % 12;
-  const a = s * Math.min(l, 1 - l);
-  const f = (n: number) => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
+  const f = (n: number) => lit - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
   return [255 * f(0), 255 * f(8), 255 * f(4)];
 };
 
-type RGB = [number, number, number];
+// ─── Hex Parsing & Formatting ────────────────────────────────────────────────
 
-const parseColor = (color: string): RGB | null => {
-  color = color.toLowerCase().trim();
+const parseHex = (hex: string): RGB => {
+  const cleaned = hex.replace(/^#/, '');
+  const expanded = cleaned.length === 3 ? cleaned[0] + cleaned[0] + cleaned[1] + cleaned[1] + cleaned[2] + cleaned[2] : cleaned;
 
-  // Named color
-  if (NAMED_COLORS[color]) {
-    return parseHexColor(NAMED_COLORS[color]);
+  const num = Number.parseInt(expanded, 16);
+  if (Number.isNaN(num)) {
+    throw new PaletteError(`Invalid hex color: '${hex}'`);
   }
 
-  // Hex color
+  return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+};
+
+const formatHex = (rgb: RGB): string => `#${rgb.map((c) => clampByte(c).toString(16).padStart(2, '0')).join('')}`;
+
+// ─── Color Parsing (multi-format) ────────────────────────────────────────────
+
+const RGB_REGEX = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)$/;
+const HSL_REGEX = /^hsla?\((\d+),\s*([\d.]+)%?,\s*([\d.]+)%?(?:,\s*[\d.]+)?\)$/;
+
+const parseColor = (input: string): RGB | null => {
+  const color = input.toLowerCase().trim();
+
+  // Named color
+  const named = NAMED_COLORS[color];
+  if (named) return parseHex(named);
+
+  // Hex
   if (color.startsWith('#')) {
     try {
-      return parseHexColor(color);
-    } catch (_e) {
+      return parseHex(color);
+    } catch {
       return null;
     }
   }
 
-  // rgb/rgba color
-  const rgbMatch = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)$/);
+  // rgb/rgba
+  const rgbMatch = color.match(RGB_REGEX);
   if (rgbMatch) {
-    return [parseInt(rgbMatch[1], 10), parseInt(rgbMatch[2], 10), parseInt(rgbMatch[3], 10)];
+    return [Number.parseInt(rgbMatch[1], 10), Number.parseInt(rgbMatch[2], 10), Number.parseInt(rgbMatch[3], 10)];
   }
 
-  // hsl/hsla color
-  const hslMatch = color.match(/^hsla?\((\d+),\s*([\d.]+)%?,\s*([\d.]+)%?(?:,\s*[\d.]+)?\)$/);
+  // hsl/hsla
+  const hslMatch = color.match(HSL_REGEX);
   if (hslMatch) {
-    const h = parseInt(hslMatch[1], 10);
-    const s = parseFloat(hslMatch[2]);
-    const l = parseFloat(hslMatch[3]);
-    return hslToRgb(h, s, l);
+    return hslToRgb(Number.parseInt(hslMatch[1], 10), Number.parseFloat(hslMatch[2]), Number.parseFloat(hslMatch[3]));
   }
 
   return null;
 };
 
-export const getHexColor = (color: string): string => {
+// ─── Public API ──────────────────────────────────────────────────────────────
+
+/**
+ * Checks whether the given string is a recognized color format.
+ * Supports hex, rgb/rgba, hsl/hsla, and CSS named colors.
+ */
+export const isValidColor = (color: string): boolean => parseColor(color) !== null;
+
+/**
+ * Converts any supported color string to a lowercase hex representation.
+ * @throws {PaletteError} if the color cannot be parsed.
+ */
+export const toHex = (color: string): string => {
   const rgb = parseColor(color);
   if (!rgb) {
     throw new PaletteError(`Invalid color: '${color}'`);
   }
-  return rgbToHex(rgb[0], rgb[1], rgb[2]).toLowerCase();
+  return formatHex(rgb).toLowerCase();
 };
 
-export const isValidColor = (color: string): boolean => {
-  return parseColor(color) !== null;
+/**
+ * Shifts a hex color's lightness in CIE-LAB space.
+ * Positive `amount` darkens, negative `amount` lightens.
+ * Compatible with chroma.js darken/brighten (Kn = 18).
+ */
+export const shiftLightness = (hexColor: string, amount: number): string => {
+  const lab = rgbToLab(parseHex(hexColor));
+  lab[0] -= amount * LAB_DARKEN_FACTOR;
+  return formatHex(labToRgb(lab));
 };
