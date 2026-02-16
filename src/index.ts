@@ -7,7 +7,7 @@ type PluginWithOptions = ReturnType<typeof createPlugin.withOptions<Record<strin
 
 const defaultColorPrefix = 'color-';
 
-const pluginFn: PluginWithOptions = createPlugin.withOptions<Record<string, string>>(
+const paletteGeneratorPlugin: PluginWithOptions = createPlugin.withOptions<Record<string, string>>(
   (options = {}) => {
     return function ({ addBase, theme }) {
       if (!options) {
@@ -66,18 +66,5 @@ const pluginFn: PluginWithOptions = createPlugin.withOptions<Record<string, stri
     return {};
   },
 );
-
-// is options function
-//! Error: The plugin "tailwindcss-palette-generator" does not accept options
-pluginFn.__isOptionsFunction = true;
-const paletteGeneratorPlugin = Object.assign(pluginFn, {
-  __isOptionsFunction: true,
-}) as PluginWithOptions;
-Object.defineProperty(paletteGeneratorPlugin, '__isOptionsFunction', {
-  value: true,
-  writable: false,
-  configurable: false,
-  enumerable: false,
-});
 
 export default paletteGeneratorPlugin;
